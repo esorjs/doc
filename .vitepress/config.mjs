@@ -2,7 +2,7 @@ import { defineConfig } from "vitepress";
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  title: "Esor Documentation",
+  title: "Esor",
   description: "Documentation for the Esor JavaScript framework",
   lang: "en-US",
   head: [["link", { rel: "icon", type: "image/png", href: "/logo.png" }]],
@@ -22,7 +22,7 @@ export default defineConfig({
     logo: "/logo.png",
     nav: [
       { text: "Home", link: "/" },
-      { text: "Examples", link: "/markdown-examples" },
+      { text: "Guide", link: "/guide/introduction" },
     ],
 
     sidebar: [
