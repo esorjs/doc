@@ -1,82 +1,82 @@
-# Introducción
+# Introduction
 
-## ¿Qué es Esor?
+## What is Esor?
 
-Esor es un framework web moderno y minimalista basado en Web Components, diseñado para crear interfaces de usuario interactivas y de alto rendimiento. Combina la potencia de los estándares web nativos con un sistema reactivo elegante, ofreciendo una experiencia de desarrollo fluida y productiva.
+Esor is a modern, minimalist web framework based on Web Components, designed to create interactive, high-performance user interfaces. It combines the power of native web standards with an elegant reactive system, providing a smooth and productive development experience.
 
 ```javascript
-import { component, html, useSignal } from "esor";
+import { component, html } from "esor";
 
 component("hello-world", () => {
-  return html`<h1>¡Hola, mundo!</h1>`;
+  return html`<h1>Hello, World!</h1>`;
 });
 ```
 
-## ¿Por qué Esor?
+## Why Esor?
 
-### 🚀 Rendimiento Excepcional
+### 🚀 Exceptional Performance
 
-Esor utiliza Web Components nativos y un sistema de reactividad granular, lo que resulta en aplicaciones rápidas y eficientes con un bundle size mínimo.
+Esor uses native Web Components and a fine-grained reactivity system based on signals, resulting in fast and efficient applications with minimal bundle size (**~3KB**).
 
-### 💡 Intuitivo y Familiar
+### 💡 Intuitive and Familiar
 
-Si conoces HTML, CSS y JavaScript, te sentirás como en casa. Esor adopta patrones familiares y los mejora con características modernas:
+If you know HTML, CSS, and JavaScript, you'll feel right at home. Esor adopts familiar patterns and enhances them with modern features:
 
 ```javascript
-import { component, html, useSignal } from "esor";
+import { component, html, signal } from "esor";
 
-component("user-profile", function () {
-  const [user, setUser] = useSignal({ name: "Ana" });
+component("user-profile", () => {
+  const name = signal("Ana");
 
   return html`
     <div class="profile">
-      <h2>${user.name}</h2>
-      <button @click=${() => setUser({ name: "Juan" })}>Cambiar Nombre</button>
+      <h2>${name()}</h2>
+      <button @click=${() => name("Juan")}>Change Name</button>
     </div>
   `;
 });
 ```
 
-### 🔧 Flexible y Extensible
+### 🔧 Flexible and Extensible
 
-- Utiliza herramientas y estándares web modernos
-- Se integra perfectamente con otras bibliotecas
-- Funciona con tus herramientas de desarrollo favoritas
+- Uses modern web tools and standards
+- Integrates seamlessly with other libraries
+- Works with your favorite development tools
 
-### 📦 Todo lo Necesario, Nada Más
+### 📦 Everything You Need, Nothing More
 
-- Sistema de componentes basado en estándares
-- Reactividad granular con signals
-- Sistema de templates potente y eficiente
-- Hooks intuitivos para gestión de estado y efectos
-- Cero dependencias
+- Standards-based component system
+- Fine-grained reactivity with signals
+- Powerful and efficient template system
+- Intuitive reactive primitives for state and effects
+- Zero dependencies
 
-## Primeros Pasos
+## Getting Started
 
-### Instalación
+### Installation
 
 ```bash
 npm install esor
 ```
 
-### Tu Primer Componente
+### Your First Component
 
 ```javascript
-import { component, html, useSignal } from "esor";
+import { component, html, signal } from "esor";
 
 component("counter-app", () => {
-  const [count, setCount] = useSignal(0);
+  const count = signal(0);
 
   return html`
     <div>
-      <h1>Contador: ${count}</h1>
-      <button @click=${() => setCount(count + 1)}>Incrementar</button>
+      <h1>Count: ${count()}</h1>
+      <button @click=${() => count(count() + 1)}>Increment</button>
     </div>
   `;
 });
 ```
 
-### Uso en HTML
+### Using in HTML
 
 ```html
 <!DOCTYPE html>
@@ -88,54 +88,55 @@ component("counter-app", () => {
 </html>
 ```
 
-## Características Principales
+## Key Features
 
-### 🔌 Web Components Nativos
+### 🔌 Native Web Components
 
-Componentes reusables basados en estándares web.
+Reusable components based on web standards.
 
-### ⚡ Reactividad Granular
+### ⚡ Fine-Grained Reactivity
 
-Sistema de signals para actualizaciones precisas y eficientes.
+Signal-based system for precise and efficient updates.
 
-### 📝 Templates Expresivos
+### 📝 Expressive Templates
 
-Sintaxis declarativa y potente para definir interfaces.
+Declarative and powerful syntax for defining interfaces.
 
 ### 🎯 Developer Experience
 
-APIs intuitivas y herramientas de desarrollo modernas.
+Intuitive APIs and modern development tools.
 
-## Comparación con Otros Frameworks
+## Comparison with Other Frameworks
 
-| Característica       | Esor           | Lit            | React       |
-| -------------------- | -------------- | -------------- | ----------- |
-| Base                 | Web Components | Web Components | Virtual DOM |
-| Reactividad          | Signals        | Properties     | Hooks       |
-| Bundle Size          | ~5KB           | ~5KB           | ~40KB       |
-| Curva de Aprendizaje | Baja           | Media          | Media       |
-| Ecosistema           | En crecimiento | Maduro         | Muy grande  |
+| Feature         | Esor           | Lit            | SolidJS     | React       |
+| --------------- | -------------- | -------------- | ----------- | ----------- |
+| Base            | Web Components | Web Components | Custom      | Virtual DOM |
+| Reactivity      | Signals        | Properties     | Signals     | Hooks       |
+| Bundle Size     | ~3KB           | ~5KB           | ~7KB        | ~40KB       |
+| Learning Curve  | Low            | Medium         | Low-Medium  | Medium      |
+| Runtime         | Direct DOM     | Direct DOM     | Direct DOM  | Virtual DOM |
 
-## ¿Para Quién es Esor?
+## Who is Esor For?
 
-Esor es ideal para:
+Esor is ideal for:
 
-- 🎯 Desarrolladores que valoran la simplicidad y el rendimiento
-- 🔧 Proyectos que necesitan componentes web reutilizables
-- 🚀 Aplicaciones que requieren alto rendimiento
-- 📚 Equipos que prefieren estándares web modernos
+- 🎯 Developers who value simplicity and performance
+- 🔧 Projects that need reusable web components
+- 🚀 Applications requiring high performance
+- 📚 Teams that prefer modern web standards
+- 💼 Developers familiar with SolidJS or signals-based reactivity
 
-## Próximos Pasos
+## Next Steps
 
-- [Guía de Inicio Rápido](./getting-started)
-- [Tutorial Básico](./tutorial)
-- [Documentación de la API](./api)
-- [Ejemplos](./examples)
+- [Quick Start Guide](./getting-started)
+- [Basic Tutorial](./tutorial)
+- [API Documentation](./api)
+- [Examples](./examples)
 
-::: tip CONSEJO
-Esor está diseñado para ser adoptado gradualmente. Puedes empezar con un solo componente en tu aplicación existente e ir creciendo desde ahí.
+::: tip TIP
+Esor is designed to be adopted gradually. You can start with a single component in your existing application and grow from there.
 :::
 
-::: warning NOTA
-Esor requiere navegadores modernos que soporten Web Components. Consulta la [tabla de compatibilidad](./guide/browser-support) para más detalles.
+::: warning NOTE
+Esor requires modern browsers that support Web Components (Custom Elements, Shadow DOM). All evergreen browsers (Chrome, Firefox, Safari, Edge) support these features.
 :::
