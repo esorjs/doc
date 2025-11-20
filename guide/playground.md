@@ -4,52 +4,13 @@ layout: doc
 
 <script setup>
 import { onMounted } from 'vue';
-import PlaygroundExample from '../.vitepress/components/PlaygroundExample.vue';
 
-// Load playground-elements
-onMounted(async () => {
-  // Dynamically import playground-elements
-  await import('https://unpkg.com/playground-elements@0.18.1/playground-ide.js');
-  setTimeout(initPlayground, 100);
-});
-
-// Theme management
-function initPlayground() {
-  const savedTheme = localStorage.getItem('playground-theme') ||
-                    (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-
-  applyTheme(savedTheme);
-
-  // Listen for theme changes
-  document.querySelectorAll('.theme-toggle').forEach(toggle => {
-    toggle.addEventListener('click', () => {
-      const currentTheme = localStorage.getItem('playground-theme') || 'light';
-      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-      applyTheme(newTheme);
-      localStorage.setItem('playground-theme', newTheme);
-    });
-  });
-}
-
-function applyTheme(theme) {
-  document.querySelectorAll('playground-ide').forEach(ide => {
-    ide.classList.remove('light-theme', 'dark-theme');
-    ide.classList.add(`${theme}-theme`);
-  });
-
-  document.querySelectorAll('.theme-toggle').forEach(toggle => {
-    const icon = toggle.querySelector('.theme-icon');
-    if (icon) {
-      icon.textContent = theme === 'light' ? '🌙' : '☀️';
-      toggle.querySelector('.theme-label').textContent =
-        theme === 'light' ? 'Dark Mode' : 'Light Mode';
-    }
-  });
-}
-
-// Counter example
-const counterFiles = {
-  'index.html': `<!DOCTYPE html>
+const examples = {
+  counter: {
+    title: 'Counter Example',
+    description: 'A simple reactive counter demonstrating signals and event handling.',
+    files: {
+      'index.html': `<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8">
@@ -58,10 +19,10 @@ const counterFiles = {
   </head>
   <body>
     <counter-app></counter-app>
-    <` + `script type="module" src="./counter.js"></` + `script>
+    <script type="module" src="./counter.js"><` + `/script>
   </body>
 </html>`,
-  'counter.js': `import { component, html, signal } from "https://unpkg.com/esor@latest/dist/esor.js";
+      'counter.js': `import { component, html, signal } from "https://unpkg.com/esor@latest/dist/esor.js";
 
 component("counter-app", () => {
   const count = signal(0);
@@ -130,11 +91,13 @@ component("counter-app", () => {
     </div>
   \`;
 });`
-};
-
-// Todo example
-const todoFiles = {
-  'index.html': `<!DOCTYPE html>
+    }
+  },
+  todo: {
+    title: 'Todo List',
+    description: 'A complete todo list with add, toggle, and remove functionality.',
+    files: {
+      'index.html': `<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8">
@@ -142,10 +105,10 @@ const todoFiles = {
   </head>
   <body>
     <todo-app></todo-app>
-    <` + `script type="module" src="./todo.js"></` + `script>
+    <script type="module" src="./todo.js"><` + `/script>
   </body>
 </html>`,
-  'todo.js': `import { component, html, signal } from "https://unpkg.com/esor@latest/dist/esor.js";
+      'todo.js': `import { component, html, signal } from "https://unpkg.com/esor@latest/dist/esor.js";
 
 component("todo-app", () => {
   const todos = signal([
@@ -289,11 +252,13 @@ component("todo-app", () => {
     </div>
   \`;
 });`
-};
-
-// User Card example
-const userCardFiles = {
-  'index.html': `<!DOCTYPE html>
+    }
+  },
+  userCard: {
+    title: 'User Card Component',
+    description: 'A reusable user card component with props and custom styling.',
+    files: {
+      'index.html': `<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8">
@@ -301,10 +266,10 @@ const userCardFiles = {
   </head>
   <body>
     <user-card name="Alice" role="Developer" avatar="👩‍💻"></user-card>
-    <` + `script type="module" src="./user-card.js"></` + `script>
+    <script type="module" src="./user-card.js"><` + `/script>
   </body>
 </html>`,
-  'user-card.js': `import { component, html } from "https://unpkg.com/esor@latest/dist/esor.js";
+      'user-card.js': `import { component, html } from "https://unpkg.com/esor@latest/dist/esor.js";
 
 component("user-card", ({ name, role, avatar }) => {
   return html\`
@@ -348,11 +313,13 @@ component("user-card", ({ name, role, avatar }) => {
     </div>
   \`;
 });`
-};
-
-// Fetch Data example
-const fetchDataFiles = {
-  'index.html': `<!DOCTYPE html>
+    }
+  },
+  randomUser: {
+    title: 'Fetch Data Example',
+    description: 'Fetching data from an API and displaying it reactively with loading states.',
+    files: {
+      'index.html': `<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8">
@@ -360,10 +327,10 @@ const fetchDataFiles = {
   </head>
   <body>
     <random-user></random-user>
-    <` + `script type="module" src="./random-user.js"></` + `script>
+    <script type="module" src="./random-user.js"><` + `/script>
   </body>
 </html>`,
-  'random-user.js': `import { component, html, signal, effect } from "https://unpkg.com/esor@latest/dist/esor.js";
+      'random-user.js': `import { component, html, signal, effect } from "https://unpkg.com/esor@latest/dist/esor.js";
 
 component("random-user", () => {
   const user = signal(null);
@@ -475,7 +442,79 @@ component("random-user", () => {
     </div>
   \`;
 });`
+    }
+  }
 };
+
+onMounted(() => {
+  // Load playground-elements
+  const script = document.createElement('script');
+  script.type = 'module';
+  script.src = 'https://unpkg.com/playground-elements@0.18.1/playground-ide.js';
+  document.head.appendChild(script);
+
+  script.onload = () => {
+    setTimeout(() => {
+      createPlaygrounds();
+      initTheme();
+    }, 200);
+  };
+});
+
+function createPlaygrounds() {
+  Object.entries(examples).forEach(([id, example]) => {
+    const container = document.getElementById(`playground-${id}`);
+    if (!container) return;
+
+    const ide = document.createElement('playground-ide');
+    ide.setAttribute('editable-file-system', '');
+    ide.setAttribute('line-numbers', '');
+    ide.setAttribute('resizable', '');
+
+    Object.entries(example.files).forEach(([filename, content]) => {
+      const script = document.createElement('script');
+      const ext = filename.split('.').pop();
+      script.setAttribute('type', `sample/${ext === 'js' ? 'js' : ext}`);
+      script.setAttribute('filename', filename);
+      script.textContent = content;
+      ide.appendChild(script);
+    });
+
+    container.appendChild(ide);
+  });
+}
+
+function initTheme() {
+  const savedTheme = localStorage.getItem('playground-theme') ||
+                    (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+
+  applyTheme(savedTheme);
+
+  document.querySelectorAll('.theme-toggle').forEach(toggle => {
+    toggle.addEventListener('click', () => {
+      const currentTheme = localStorage.getItem('playground-theme') || 'light';
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      applyTheme(newTheme);
+      localStorage.setItem('playground-theme', newTheme);
+    });
+  });
+}
+
+function applyTheme(theme) {
+  document.querySelectorAll('playground-ide').forEach(ide => {
+    ide.classList.remove('light-theme', 'dark-theme');
+    ide.classList.add(`${theme}-theme`);
+  });
+
+  document.querySelectorAll('.theme-toggle').forEach(toggle => {
+    const icon = toggle.querySelector('.theme-icon');
+    if (icon) {
+      icon.textContent = theme === 'light' ? '🌙' : '☀️';
+      toggle.querySelector('.theme-label').textContent =
+        theme === 'light' ? 'Dark Mode' : 'Light Mode';
+    }
+  });
+}
 </script>
 
 <style>
@@ -504,28 +543,26 @@ component("random-user", () => {
     background: var(--vp-c-bg-mute);
   }
 
-  .notification {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    padding: 12px 20px;
-    background: var(--vp-c-brand-1);
-    color: white;
-    border-radius: 6px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    opacity: 0;
-    transform: translateY(-10px);
-    transition: all 0.3s;
-    z-index: 1000;
+  .example-section {
+    margin: 40px 0;
   }
 
-  .notification.show {
-    opacity: 1;
-    transform: translateY(0);
+  .example-section h3 {
+    margin-bottom: 8px;
+  }
+
+  .example-section p {
+    margin-bottom: 16px;
+    color: var(--vp-c-text-2);
+  }
+
+  .playground-container {
+    margin: 20px 0;
+    min-height: 400px;
   }
 
   /* Dark mode theme for playground */
-  :deep(playground-ide.dark-theme) {
+  playground-ide.dark-theme {
     --playground-code-background: #1e1e1e;
     --playground-code-default-color: #d4d4d4;
     --playground-code-comment-color: #6a9955;
@@ -545,7 +582,7 @@ component("random-user", () => {
   }
 
   /* Light mode theme for playground */
-  :deep(playground-ide.light-theme) {
+  playground-ide.light-theme {
     --playground-code-background: #ffffff;
     --playground-code-default-color: #000000;
     --playground-code-comment-color: #008000;
@@ -578,35 +615,31 @@ Try Esor directly in your browser! Edit the code and see the results instantly.
 
 ## Counter Example
 
-<PlaygroundExample :files="counterFiles">
-  <template #description>
-    <p>A simple reactive counter demonstrating signals and event handling.</p>
-  </template>
-</PlaygroundExample>
+<div class="example-section">
+  <p>A simple reactive counter demonstrating signals and event handling.</p>
+  <div id="playground-counter" class="playground-container"></div>
+</div>
 
 ## Todo List
 
-<PlaygroundExample :files="todoFiles">
-  <template #description>
-    <p>A complete todo list with add, toggle, and remove functionality.</p>
-  </template>
-</PlaygroundExample>
+<div class="example-section">
+  <p>A complete todo list with add, toggle, and remove functionality.</p>
+  <div id="playground-todo" class="playground-container"></div>
+</div>
 
 ## User Card Component
 
-<PlaygroundExample :files="userCardFiles">
-  <template #description>
-    <p>A reusable user card component with props and custom styling.</p>
-  </template>
-</PlaygroundExample>
+<div class="example-section">
+  <p>A reusable user card component with props and custom styling.</p>
+  <div id="playground-userCard" class="playground-container"></div>
+</div>
 
 ## Fetch Data Example
 
-<PlaygroundExample :files="fetchDataFiles">
-  <template #description>
-    <p>Fetching data from an API and displaying it reactively with loading states.</p>
-  </template>
-</PlaygroundExample>
+<div class="example-section">
+  <p>Fetching data from an API and displaying it reactively with loading states.</p>
+  <div id="playground-randomUser" class="playground-container"></div>
+</div>
 
 ## Next Steps
 
