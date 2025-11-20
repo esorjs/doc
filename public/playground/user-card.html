@@ -2,14 +2,15 @@
 <html>
 <head>
   <meta charset="UTF-8">
+  <title>User Card - Esor</title>
   <style>
-    body { margin: 0; padding: 0; }
+    body { margin: 0; padding: 0; font-family: system-ui, sans-serif; }
   </style>
 </head>
 <body>
   <user-card name="Alice" role="Developer" avatar="👩‍💻"></user-card>
-  <script type="module">
-import { component, html } from "https://unpkg.com/esor@latest/dist/esor.js";
+  <script type="module" crossorigin>
+import { component, html } from "https://cdn.jsdelivr.net/npm/esor@latest/dist/esor.js";
 
 component("user-card", ({ name, role, avatar }) => {
   return html`
