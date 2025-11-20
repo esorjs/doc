@@ -4,9 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Esor Playground</title>
-  <script type="module">
-    import 'https://cdn.skypack.dev/playground-elements@0.18.1';
-  </script>
   <style>
     * {
       margin: 0;
@@ -82,38 +79,73 @@
 
     .playground-container {
       flex: 1;
+      display: flex;
       overflow: hidden;
-      position: relative;
     }
 
-    playground-ide {
-      width: 100%;
-      height: 100%;
-      display: block;
+    .editor-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid #3e3e42;
     }
 
-    /* Dark theme for playground */
-    playground-ide {
-      --playground-code-background: #1e1e1e;
-      --playground-code-default-color: #d4d4d4;
-      --playground-code-comment-color: #6a9955;
-      --playground-code-keyword-color: #569cd6;
-      --playground-code-number-color: #b5cea8;
-      --playground-code-string-color: #ce9178;
-      --playground-code-atom-color: #4ec9b0;
-      --playground-code-property-color: #9cdcfe;
-      --playground-code-variable-color: #9cdcfe;
-      --playground-code-callee-color: #dcdcaa;
-      --playground-code-operator-color: #d4d4d4;
-      --playground-border-color: #3e3e3e;
-      --playground-preview-toolbar-background: #252526;
-      --playground-preview-toolbar-foreground: #cccccc;
-      --playground-bar-background: #252526;
-      --playground-highlight-color: #094771;
+    .editor-header {
+      background: #252526;
+      padding: 8px 16px;
+      border-bottom: 1px solid #3e3e42;
+      font-size: 13px;
+      color: #cccccc;
     }
 
-    .hidden {
-      display: none !important;
+    textarea {
+      flex: 1;
+      background: #1e1e1e;
+      color: #d4d4d4;
+      border: none;
+      padding: 16px;
+      font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+      font-size: 14px;
+      resize: none;
+      outline: none;
+      line-height: 1.6;
+    }
+
+    .preview-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #fff;
+    }
+
+    .preview-header {
+      background: #252526;
+      padding: 8px 16px;
+      border-bottom: 1px solid #3e3e42;
+      font-size: 13px;
+      color: #cccccc;
+      display: flex;
+      gap: 12px;
+    }
+
+    .run-btn {
+      background: #0e639c;
+      color: white;
+      border: none;
+      padding: 4px 12px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .run-btn:hover {
+      background: #1177bb;
+    }
+
+    iframe {
+      flex: 1;
+      border: none;
+      background: white;
     }
   </style>
 </head>
@@ -132,26 +164,23 @@
     <button class="tab" data-example="fetch">Data Fetching</button>
   </div>
 
-  <div class="playground-container" id="playground-root">
+  <div class="playground-container">
+    <div class="editor-container">
+      <div class="editor-header">JavaScript</div>
+      <textarea id="editor" spellcheck="false"></textarea>
+    </div>
+    <div class="preview-container">
+      <div class="preview-header">
+        <span>Preview</span>
+        <button class="run-btn" onclick="runCode()">▶ Run</button>
+      </div>
+      <iframe id="preview"></iframe>
+    </div>
   </div>
 
-  <script type="module">
+  <script>
     const examples = {
-      counter: {
-        files: {
-          'index.html': `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Esor Counter</title>
-</head>
-<body>
-  <counter-app></counter-app>
-  <sc` + `ript type="module" src="./counter.js"></sc` + `ript>
-</body>
-</html>`,
-          'counter.js': `import { component, html, signal } from "https://unpkg.com/esor@latest/dist/esor.js";
+      counter: `import { component, html, signal } from "https://unpkg.com/esor@latest/dist/esor.js";
 
 component("counter-app", () => {
   const count = signal(0);
@@ -197,10 +226,6 @@ component("counter-app", () => {
         background: #2980b9;
       }
 
-      button:active {
-        transform: scale(0.95);
-      }
-
       .reset {
         background: #95a5a6;
       }
@@ -219,23 +244,8 @@ component("counter-app", () => {
       </div>
     </div>
   \`;
-});`
-        }
-      },
-      todo: {
-        files: {
-          'index.html': `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Esor Todo List</title>
-</head>
-<body>
-  <todo-app></todo-app>
-  <sc` + `ript type="module" src="./todo.js"></sc` + `ript>
-</body>
-</html>`,
-          'todo.js': `import { component, html, signal } from "https://unpkg.com/esor@latest/dist/esor.js";
+});`,
+      todo: `import { component, html, signal } from "https://unpkg.com/esor@latest/dist/esor.js";
 
 component("todo-app", () => {
   const todos = signal([
@@ -246,10 +256,7 @@ component("todo-app", () => {
 
   const addTodo = () => {
     if (input().trim()) {
-      todos([
-        ...todos(),
-        { id: Date.now(), text: input(), done: false }
-      ]);
+      todos([...todos(), { id: Date.now(), text: input(), done: false }]);
       input("");
     }
   };
@@ -267,7 +274,7 @@ component("todo-app", () => {
       :host {
         display: block;
         max-width: 500px;
-        margin: 0 auto;
+        margin: 20px auto;
         padding: 20px;
         font-family: system-ui, sans-serif;
       }
@@ -298,11 +305,6 @@ component("todo-app", () => {
         border: none;
         border-radius: 4px;
         cursor: pointer;
-        font-size: 16px;
-      }
-
-      button:hover {
-        background: #2980b9;
       }
 
       .todo-list {
@@ -322,30 +324,14 @@ component("todo-app", () => {
 
       .todo-item.done {
         opacity: 0.6;
-      }
-
-      .todo-item.done span {
         text-decoration: line-through;
-      }
-
-      .todo-item input[type="checkbox"] {
-        width: 20px;
-        height: 20px;
-        cursor: pointer;
-      }
-
-      .todo-item span {
-        flex: 1;
       }
 
       .remove-btn {
         padding: 4px 8px;
         background: #e74c3c;
         font-size: 14px;
-      }
-
-      .remove-btn:hover {
-        background: #c0392b;
+        margin-left: auto;
       }
     </style>
 
@@ -364,37 +350,16 @@ component("todo-app", () => {
       <ul class="todo-list">
         \${todos().map(todo => html\`
           <li class="\${todo.done ? 'todo-item done' : 'todo-item'}" key=\${todo.id}>
-            <input
-              type="checkbox"
-              :checked=\${todo.done}
-              @change=\${() => toggleTodo(todo.id)}
-            />
+            <input type="checkbox" :checked=\${todo.done} @change=\${() => toggleTodo(todo.id)} />
             <span>\${todo.text}</span>
-            <button class="remove-btn" @click=\${() => removeTodo(todo.id)}>
-              ✕
-            </button>
+            <button class="remove-btn" @click=\${() => removeTodo(todo.id)}>✕</button>
           </li>
         \`)}
       </ul>
     </div>
   \`;
-});`
-        }
-      },
-      'user-card': {
-        files: {
-          'index.html': `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Esor User Card</title>
-</head>
-<body>
-  <user-card name="Alice" role="Developer" avatar="👩‍💻"></user-card>
-  <sc` + `ript type="module" src="./user-card.js"></sc` + `ript>
-</body>
-</html>`,
-          'user-card.js': `import { component, html } from "https://unpkg.com/esor@latest/dist/esor.js";
+});`,
+      'user-card': `import { component, html } from "https://unpkg.com/esor@latest/dist/esor.js";
 
 component("user-card", ({ name, role, avatar }) => {
   return html\`
@@ -427,7 +392,6 @@ component("user-card", ({ name, role, avatar }) => {
       p {
         margin: 0;
         opacity: 0.9;
-        font-size: 1rem;
       }
     </style>
 
@@ -437,23 +401,8 @@ component("user-card", ({ name, role, avatar }) => {
       <p>\${role}</p>
     </div>
   \`;
-});`
-        }
-      },
-      fetch: {
-        files: {
-          'index.html': `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Esor Data Fetching</title>
-</head>
-<body>
-  <random-user></random-user>
-  <sc` + `ript type="module" src="./random-user.js"></sc` + `ript>
-</body>
-</html>`,
-          'random-user.js': `import { component, html, signal, effect } from "https://unpkg.com/esor@latest/dist/esor.js";
+});`,
+      fetch: `import { component, html, signal, effect } from "https://unpkg.com/esor@latest/dist/esor.js";
 
 component("random-user", () => {
   const user = signal(null);
@@ -466,13 +415,12 @@ component("random-user", () => {
       const data = await res.json();
       user(data.results[0]);
     } catch (error) {
-      console.error('Error fetching user:', error);
+      console.error('Error:', error);
     } finally {
       loading(false);
     }
   };
 
-  // Fetch on mount
   effect(() => {
     fetchUser();
   });
@@ -497,10 +445,6 @@ component("random-user", () => {
       h2 {
         color: #2c3e50;
         margin-bottom: 20px;
-      }
-
-      .user-info {
-        margin: 20px 0;
       }
 
       .avatar {
@@ -528,18 +472,8 @@ component("random-user", () => {
         border: none;
         padding: 12px 24px;
         border-radius: 6px;
-        font-size: 16px;
         cursor: pointer;
-        transition: background 0.2s;
-      }
-
-      button:hover {
-        background: #2980b9;
-      }
-
-      button:disabled {
-        background: #95a5a6;
-        cursor: not-allowed;
+        margin-top: 15px;
       }
 
       .loading {
@@ -550,82 +484,79 @@ component("random-user", () => {
 
     <div class="container">
       <h2>🎲 Random User Generator</h2>
-      \${loading() ? html\`
-        <div class="loading">Loading...</div>
-      \` : user() ? html\`
-        <div class="user-info">
-          <img class="avatar" src="\${user().picture.large}" alt="User avatar" />
-          <div class="name">
-            \${user().name.first} \${user().name.last}
-          </div>
+      \${loading() ? html\`<div class="loading">Loading...</div>\` : user() ? html\`
+        <div>
+          <img class="avatar" src="\${user().picture.large}" alt="User" />
+          <div class="name">\${user().name.first} \${user().name.last}</div>
           <div class="email">\${user().email}</div>
+          <button @click=\${fetchUser}>Get Another User</button>
         </div>
-        <button @click=\${fetchUser}>Get Another User</button>
       \` : null}
     </div>
   \`;
 });`
-        }
-      }
     };
 
-    let currentPlayground = null;
+    const htmlTemplates = {
+      counter: '<counter-app></counter-app>',
+      todo: '<todo-app></todo-app>',
+      'user-card': '<user-card name="Alice" role="Developer" avatar="👩‍💻"></user-card>',
+      fetch: '<random-user></random-user>'
+    };
 
-    function createPlayground(exampleId) {
-      const container = document.getElementById('playground-root');
-      const example = examples[exampleId];
+    const editor = document.getElementById('editor');
+    let currentExample = 'counter';
 
-      if (!example) {
-        console.error('Example not found:', exampleId);
-        return;
-      }
-
-      // Remove current playground
-      if (currentPlayground) {
-        currentPlayground.remove();
-      }
-
-      // Create new playground
-      const ide = document.createElement('playground-ide');
-      ide.id = `${exampleId}-playground`;
-      ide.setAttribute('editable-file-system', '');
-      ide.setAttribute('line-numbers', '');
-      ide.setAttribute('resizable', '');
-
-      // Add files
-      Object.entries(example.files).forEach(([filename, content]) => {
-        const script = document.createElement('script');
-        const ext = filename.split('.').pop();
-        script.setAttribute('type', `sample/${ext === 'js' ? 'js' : ext}`);
-        script.setAttribute('filename', filename);
-        script.textContent = content;
-        ide.appendChild(script);
-      });
-
-      container.appendChild(ide);
-      currentPlayground = ide;
+    // Load example
+    function loadExample(exampleId) {
+      currentExample = exampleId;
+      editor.value = examples[exampleId];
+      runCode();
     }
 
-    // Wait for custom element to be defined
-    customElements.whenDefined('playground-ide').then(() => {
-      // Load initial playground
-      createPlayground('counter');
+    // Run code
+    function runCode() {
+      const code = editor.value;
+      const html = htmlTemplates[currentExample];
 
-      // Tab switching
-      const tabs = document.querySelectorAll('.tab');
-      tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-          const example = tab.dataset.example;
+      const iframeDoc = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body { margin: 0; padding: 0; }
+  </style>
+</head>
+<body>
+  ${html}
+  <script type="module">
+    ${code}
+  </scr${'ipt>'}
+</body>
+</html>`;
 
-          // Update active tab
-          tabs.forEach(t => t.classList.remove('active'));
-          tab.classList.add('active');
+      const iframe = document.getElementById('preview');
+      iframe.srcdoc = iframeDoc;
+    }
 
-          // Create corresponding playground
-          createPlayground(example);
-        });
+    // Tab switching
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        loadExample(tab.dataset.example);
       });
     });
+
+    // Auto-run on edit
+    editor.addEventListener('input', () => {
+      clearTimeout(window.runTimeout);
+      window.runTimeout = setTimeout(runCode, 500);
+    });
+
+    // Load initial example
+    loadExample('counter');
   </script>
 </body>
 </html>
