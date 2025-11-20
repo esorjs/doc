@@ -541,7 +541,18 @@ component("random-user", () => {
 </html>`;
 
       const iframe = document.getElementById('preview');
-      iframe.srcdoc = iframeDoc;
+
+      // Revoke previous blob URL if exists
+      if (iframe.blobURL) {
+        URL.revokeObjectURL(iframe.blobURL);
+      }
+
+      // Create blob URL to avoid CORS issues
+      const blob = new Blob([iframeDoc], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+
+      iframe.src = url;
+      iframe.blobURL = url;
     }
 
     // Tab switching
