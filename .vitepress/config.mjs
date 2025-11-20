@@ -50,8 +50,11 @@ export default defineConfig({
         ],
       },
       {
-        text: "Examples",
-        items: [{ text: "Practical Examples", link: "/guide/examples" }],
+        text: "Resources",
+        items: [
+          { text: "Templates & Starter Kits", link: "/guide/templates" },
+          { text: "Practical Examples", link: "/guide/examples" },
+        ],
       },
     ],
 
