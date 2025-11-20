@@ -88,6 +88,7 @@
     .playground-container {
       flex: 1;
       overflow: hidden;
+      position: relative;
     }
 
     playground-ide {
@@ -136,10 +137,14 @@
     <button class="tab" data-example="fetch">Data Fetching</button>
   </div>
 
-  <div class="playground-container">
-    <!-- Counter Example -->
-    <playground-ide id="counter-playground" editable-file-system line-numbers resizable>
-      <script type="sample/html" filename="index.html"><!DOCTYPE html>
+  <div class="playground-container" id="playground-root">
+  </div>
+
+  <script type="module">
+    const examples = {
+      counter: {
+        files: {
+          'index.html': `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -148,11 +153,10 @@
 </head>
 <body>
   <counter-app></counter-app>
-  <script type="module" src="./counter.js"></script>
+  <sc` + `ript type="module" src="./counter.js"></sc` + `ript>
 </body>
-</html></script>
-
-      <script type="sample/js" filename="counter.js">import { component, html, signal } from "https://unpkg.com/esor@latest/dist/esor.js";
+</html>`,
+          'counter.js': `import { component, html, signal } from "https://unpkg.com/esor@latest/dist/esor.js";
 
 component("counter-app", () => {
   const count = signal(0);
@@ -161,7 +165,7 @@ component("counter-app", () => {
   const decrement = () => count(count() - 1);
   const reset = () => count(0);
 
-  return html`
+  return html\`
     <style>
       :host {
         display: block;
@@ -212,20 +216,20 @@ component("counter-app", () => {
     </style>
 
     <div>
-      <h1>${count()}</h1>
+      <h1>\${count()}</h1>
       <div class="buttons">
-        <button @click=${decrement}>-</button>
-        <button @click=${reset} class="reset">Reset</button>
-        <button @click=${increment}>+</button>
+        <button @click=\${decrement}>-</button>
+        <button @click=\${reset} class="reset">Reset</button>
+        <button @click=\${increment}>+</button>
       </div>
     </div>
-  `;
-});</script>
-    </playground-ide>
-
-    <!-- Todo Example -->
-    <playground-ide id="todo-playground" class="hidden" editable-file-system line-numbers resizable>
-      <script type="sample/html" filename="index.html"><!DOCTYPE html>
+  \`;
+});`
+        }
+      },
+      todo: {
+        files: {
+          'index.html': `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -233,11 +237,10 @@ component("counter-app", () => {
 </head>
 <body>
   <todo-app></todo-app>
-  <script type="module" src="./todo.js"></script>
+  <sc` + `ript type="module" src="./todo.js"></sc` + `ript>
 </body>
-</html></script>
-
-      <script type="sample/js" filename="todo.js">import { component, html, signal } from "https://unpkg.com/esor@latest/dist/esor.js";
+</html>`,
+          'todo.js': `import { component, html, signal } from "https://unpkg.com/esor@latest/dist/esor.js";
 
 component("todo-app", () => {
   const todos = signal([
@@ -264,7 +267,7 @@ component("todo-app", () => {
     todos(todos().filter(t => t.id !== id));
   };
 
-  return html`
+  return html\`
     <style>
       :host {
         display: block;
@@ -357,35 +360,35 @@ component("todo-app", () => {
         <input
           type="text"
           placeholder="Add a new task..."
-          :value=${input()}
-          @input=${(e) => input(e.target.value)}
-          @keypress=${(e) => e.key === 'Enter' && addTodo()}
+          :value=\${input()}
+          @input=\${(e) => input(e.target.value)}
+          @keypress=\${(e) => e.key === 'Enter' && addTodo()}
         />
-        <button @click=${addTodo}>Add</button>
+        <button @click=\${addTodo}>Add</button>
       </div>
       <ul class="todo-list">
-        ${todos().map(todo => html`
-          <li class="${todo.done ? 'todo-item done' : 'todo-item'}" key=${todo.id}>
+        \${todos().map(todo => html\`
+          <li class="\${todo.done ? 'todo-item done' : 'todo-item'}" key=\${todo.id}>
             <input
               type="checkbox"
-              :checked=${todo.done}
-              @change=${() => toggleTodo(todo.id)}
+              :checked=\${todo.done}
+              @change=\${() => toggleTodo(todo.id)}
             />
-            <span>${todo.text}</span>
-            <button class="remove-btn" @click=${() => removeTodo(todo.id)}>
+            <span>\${todo.text}</span>
+            <button class="remove-btn" @click=\${() => removeTodo(todo.id)}>
               ✕
             </button>
           </li>
-        `)}
+        \`)}
       </ul>
     </div>
-  `;
-});</script>
-    </playground-ide>
-
-    <!-- User Card Example -->
-    <playground-ide id="user-card-playground" class="hidden" editable-file-system line-numbers resizable>
-      <script type="sample/html" filename="index.html"><!DOCTYPE html>
+  \`;
+});`
+        }
+      },
+      'user-card': {
+        files: {
+          'index.html': `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -393,14 +396,13 @@ component("todo-app", () => {
 </head>
 <body>
   <user-card name="Alice" role="Developer" avatar="👩‍💻"></user-card>
-  <script type="module" src="./user-card.js"></script>
+  <sc` + `ript type="module" src="./user-card.js"></sc` + `ript>
 </body>
-</html></script>
-
-      <script type="sample/js" filename="user-card.js">import { component, html } from "https://unpkg.com/esor@latest/dist/esor.js";
+</html>`,
+          'user-card.js': `import { component, html } from "https://unpkg.com/esor@latest/dist/esor.js";
 
 component("user-card", ({ name, role, avatar }) => {
-  return html`
+  return html\`
     <style>
       :host {
         display: block;
@@ -435,17 +437,17 @@ component("user-card", ({ name, role, avatar }) => {
     </style>
 
     <div class="card">
-      <div class="avatar">${avatar}</div>
-      <h2>${name}</h2>
-      <p>${role}</p>
+      <div class="avatar">\${avatar}</div>
+      <h2>\${name}</h2>
+      <p>\${role}</p>
     </div>
-  `;
-});</script>
-    </playground-ide>
-
-    <!-- Fetch Example -->
-    <playground-ide id="fetch-playground" class="hidden" editable-file-system line-numbers resizable>
-      <script type="sample/html" filename="index.html"><!DOCTYPE html>
+  \`;
+});`
+        }
+      },
+      fetch: {
+        files: {
+          'index.html': `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -453,11 +455,10 @@ component("user-card", ({ name, role, avatar }) => {
 </head>
 <body>
   <random-user></random-user>
-  <script type="module" src="./random-user.js"></script>
+  <sc` + `ript type="module" src="./random-user.js"></sc` + `ript>
 </body>
-</html></script>
-
-      <script type="sample/js" filename="random-user.js">import { component, html, signal, effect } from "https://unpkg.com/esor@latest/dist/esor.js";
+</html>`,
+          'random-user.js': `import { component, html, signal, effect } from "https://unpkg.com/esor@latest/dist/esor.js";
 
 component("random-user", () => {
   const user = signal(null);
@@ -481,7 +482,7 @@ component("random-user", () => {
     fetchUser();
   });
 
-  return html`
+  return html\`
     <style>
       :host {
         display: block;
@@ -554,44 +555,79 @@ component("random-user", () => {
 
     <div class="container">
       <h2>🎲 Random User Generator</h2>
-      ${loading() ? html`
+      \${loading() ? html\`
         <div class="loading">Loading...</div>
-      ` : user() ? html`
+      \` : user() ? html\`
         <div class="user-info">
-          <img class="avatar" src="${user().picture.large}" alt="User avatar" />
+          <img class="avatar" src="\${user().picture.large}" alt="User avatar" />
           <div class="name">
-            ${user().name.first} ${user().name.last}
+            \${user().name.first} \${user().name.last}
           </div>
-          <div class="email">${user().email}</div>
+          <div class="email">\${user().email}</div>
         </div>
-        <button @click=${fetchUser}>Get Another User</button>
-      ` : null}
+        <button @click=\${fetchUser}>Get Another User</button>
+      \` : null}
     </div>
-  `;
-});</script>
-    </playground-ide>
-  </div>
+  \`;
+});`
+        }
+      }
+    };
 
-  <script>
-    // Tab switching
-    const tabs = document.querySelectorAll('.tab');
-    const playgrounds = document.querySelectorAll('playground-ide');
+    let currentPlayground = null;
 
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        const example = tab.dataset.example;
+    function createPlayground(exampleId) {
+      const container = document.getElementById('playground-root');
+      const example = examples[exampleId];
 
-        // Update active tab
-        tabs.forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
+      if (!example) {
+        console.error('Example not found:', exampleId);
+        return;
+      }
 
-        // Show corresponding playground
-        playgrounds.forEach(pg => {
-          if (pg.id === `${example}-playground`) {
-            pg.classList.remove('hidden');
-          } else {
-            pg.classList.add('hidden');
-          }
+      // Remove current playground
+      if (currentPlayground) {
+        currentPlayground.remove();
+      }
+
+      // Create new playground
+      const ide = document.createElement('playground-ide');
+      ide.id = `${exampleId}-playground`;
+      ide.setAttribute('editable-file-system', '');
+      ide.setAttribute('line-numbers', '');
+      ide.setAttribute('resizable', '');
+
+      // Add files
+      Object.entries(example.files).forEach(([filename, content]) => {
+        const script = document.createElement('script');
+        const ext = filename.split('.').pop();
+        script.setAttribute('type', `sample/${ext === 'js' ? 'js' : ext}`);
+        script.setAttribute('filename', filename);
+        script.textContent = content;
+        ide.appendChild(script);
+      });
+
+      container.appendChild(ide);
+      currentPlayground = ide;
+    }
+
+    // Wait for custom element to be defined
+    customElements.whenDefined('playground-ide').then(() => {
+      // Load initial playground
+      createPlayground('counter');
+
+      // Tab switching
+      const tabs = document.querySelectorAll('.tab');
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          const example = tab.dataset.example;
+
+          // Update active tab
+          tabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+
+          // Create corresponding playground
+          createPlayground(example);
         });
       });
     });
