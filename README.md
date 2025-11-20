@@ -76,7 +76,7 @@ Contributions to improve the documentation are welcome!
 
 ## License
 
-MIT License - see [LICENSE](./LICENSE) file for details
+MIT License
 
 ## Links
 
