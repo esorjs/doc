@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body { margin: 0; padding: 0; }
+  </style>
+</head>
+<body>
+  <user-card name="Alice" role="Developer" avatar="👩‍💻"></user-card>
+  <script type="module">
+import { component, html } from "https://unpkg.com/esor@latest/dist/esor.js";
+
+component("user-card", ({ name, role, avatar }) => {
+  return html`
+    <style>
+      :host {
+        display: block;
+        max-width: 300px;
+        margin: 20px;
+      }
+
+      .card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 12px;
+        padding: 30px;
+        color: white;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        text-align: center;
+      }
+
+      .avatar {
+        font-size: 4rem;
+        margin-bottom: 15px;
+      }
+
+      h2 {
+        margin: 0 0 5px 0;
+        font-size: 1.5rem;
+      }
+
+      p {
+        margin: 0;
+        opacity: 0.9;
+      }
+    </style>
+
+    <div class="card">
+      <div class="avatar">\${avatar}</div>
+      <h2>\${name}</h2>
+      <p>\${role}</p>
+    </div>
+  `;
+});
+  </script>
+</body>
+</html>

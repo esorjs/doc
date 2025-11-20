@@ -511,48 +511,27 @@ component("random-user", () => {
     const editor = document.getElementById('editor');
     let currentExample = 'counter';
 
+    const exampleFiles = {
+      counter: 'counter.html',
+      todo: 'todo.html',
+      'user-card': 'user-card.html',
+      fetch: 'fetch.html'
+    };
+
     // Load example
     function loadExample(exampleId) {
       currentExample = exampleId;
       editor.value = examples[exampleId];
-      runCode();
+
+      // Load the actual HTML file directly to avoid CORS
+      const iframe = document.getElementById('preview');
+      iframe.src = exampleFiles[exampleId];
     }
 
-    // Run code
+    // Run code - not used anymore
     function runCode() {
-      const code = editor.value;
-      const html = htmlTemplates[currentExample];
-
-      const iframeDoc = `
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <style>
-    body { margin: 0; padding: 0; }
-  </style>
-</head>
-<body>
-  ${html}
-  <script type="module">
-    ${code}
-  </scr${'ipt>'}
-</body>
-</html>`;
-
-      const iframe = document.getElementById('preview');
-
-      // Revoke previous blob URL if exists
-      if (iframe.blobURL) {
-        URL.revokeObjectURL(iframe.blobURL);
-      }
-
-      // Create blob URL to avoid CORS issues
-      const blob = new Blob([iframeDoc], { type: 'text/html' });
-      const url = URL.createObjectURL(blob);
-
-      iframe.src = url;
-      iframe.blobURL = url;
+      // No-op, just for compatibility with button
+      loadExample(currentExample);
     }
 
     // Tab switching
@@ -562,12 +541,6 @@ component("random-user", () => {
         tab.classList.add('active');
         loadExample(tab.dataset.example);
       });
-    });
-
-    // Auto-run on edit
-    editor.addEventListener('input', () => {
-      clearTimeout(window.runTimeout);
-      window.runTimeout = setTimeout(runCode, 500);
     });
 
     // Load initial example
