@@ -139,6 +139,14 @@
 </html>
       </script>
 
+      <script type="sample/importmap">
+{
+  "imports": {
+    "esor": "https://cdn.jsdelivr.net/npm/esor@latest/dist/esor.js"
+  }
+}
+      </script>
+
       <script type="sample/js" filename="counter.js" selected>
 import { component, html, signal } from 'esor';
 
@@ -206,14 +214,6 @@ component("counter-app", () => {
   `;
 });
       </script>
-
-      <script type="sample/json" filename="package.json" hidden>
-{
-  "dependencies": {
-    "esor": "latest"
-  }
-}
-      </script>
     </playground-ide>
 
     <!-- Todo List Example -->
@@ -230,6 +230,14 @@ component("counter-app", () => {
   <script type="module" src="./todo.js">&lt;/script>
 </body>
 </html>
+      </script>
+
+      <script type="sample/importmap">
+{
+  "imports": {
+    "esor": "https://cdn.jsdelivr.net/npm/esor@latest/dist/esor.js"
+  }
+}
       </script>
 
       <script type="sample/js" filename="todo.js" selected>
@@ -348,14 +356,6 @@ component("todo-app", () => {
   `;
 });
       </script>
-
-      <script type="sample/json" filename="package.json" hidden>
-{
-  "dependencies": {
-    "esor": "latest"
-  }
-}
-      </script>
     </playground-ide>
 
     <!-- User Card Example -->
@@ -372,6 +372,14 @@ component("todo-app", () => {
   <script type="module" src="./user-card.js">&lt;/script>
 </body>
 </html>
+      </script>
+
+      <script type="sample/importmap">
+{
+  "imports": {
+    "esor": "https://cdn.jsdelivr.net/npm/esor@latest/dist/esor.js"
+  }
+}
       </script>
 
       <script type="sample/js" filename="user-card.js" selected>
@@ -419,14 +427,6 @@ component("user-card", ({ name, role, avatar }) => {
   `;
 });
       </script>
-
-      <script type="sample/json" filename="package.json" hidden>
-{
-  "dependencies": {
-    "esor": "latest"
-  }
-}
-      </script>
     </playground-ide>
 
     <!-- Data Fetching Example -->
@@ -443,6 +443,14 @@ component("user-card", ({ name, role, avatar }) => {
   <script type="module" src="./fetch.js">&lt;/script>
 </body>
 </html>
+      </script>
+
+      <script type="sample/importmap">
+{
+  "imports": {
+    "esor": "https://cdn.jsdelivr.net/npm/esor@latest/dist/esor.js"
+  }
+}
       </script>
 
       <script type="sample/js" filename="fetch.js" selected>
@@ -539,14 +547,6 @@ component("random-user", () => {
     </div>
   `;
 });
-      </script>
-
-      <script type="sample/json" filename="package.json" hidden>
-{
-  "dependencies": {
-    "esor": "latest"
-  }
-}
       </script>
     </playground-ide>
   </div>
