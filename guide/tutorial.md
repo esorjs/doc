@@ -36,7 +36,7 @@ component("counter-app", () => {
   return html`
     <div>
       <h2>Count: ${count()}</h2>
-      <button @click=${() => count(count() + 1)}>Increment</button>
+      <button onclick=${() => count(count() + 1)}>Increment</button>
     </div>
   `;
 });
@@ -111,7 +111,7 @@ component("text-input", () => {
       <input
         type="text"
         value=${text()}
-        @input=${handleInput}
+        oninput=${handleInput}
         placeholder="Type something..."
       />
       <p>Characters: ${charCount()}</p>
@@ -122,9 +122,9 @@ component("text-input", () => {
 ```
 
 **Common events:**
-- `@click` - Click events
-- `@input` - Input changes
-- `@change` - Value changes
+- `onclick` - Click events
+- `oninput` - Input changes
+- `onchange` - Value changes
 - `@submit` - Form submissions
 - `@keydown`, `@keyup` - Keyboard events
 
@@ -165,17 +165,17 @@ component("task-list", () => {
     <div>
       <input
         value=${newTask()}
-        @input=${(e) => newTask(e.target.value)}
+        oninput=${(e) => newTask(e.target.value)}
         @keydown=${(e) => e.key === "Enter" && addTask()}
         placeholder="New task..."
       />
-      <button @click=${addTask}>Add</button>
+      <button onclick=${addTask}>Add</button>
 
       <ul>
         ${tasks().map(task => html`
           <li
             style="text-decoration: ${task.done ? 'line-through' : 'none'}"
-            @click=${() => toggleTask(task.id)}
+            onclick=${() => toggleTask(task.id)}
           >
             ${task.text}
           </li>
@@ -243,7 +243,7 @@ component("price-calculator", () => {
         Price: $<input
           type="number"
           value=${price()}
-          @input=${(e) => price(Number(e.target.value))}
+          oninput=${(e) => price(Number(e.target.value))}
         />
       </label>
 
@@ -251,7 +251,7 @@ component("price-calculator", () => {
         Quantity: <input
           type="number"
           value=${quantity()}
-          @input=${(e) => quantity(Number(e.target.value))}
+          oninput=${(e) => quantity(Number(e.target.value))}
         />
       </label>
 

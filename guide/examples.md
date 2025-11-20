@@ -58,7 +58,7 @@ component("shopping-cart", () => {
         ${products.map(product => html`
           <div class="product">
             <span>${product.name} - $${product.price}</span>
-            <button @click=${() => addItem(product)}>Add to Cart</button>
+            <button onclick=${() => addItem(product)}>Add to Cart</button>
           </div>
         `)}
       </div>
@@ -75,10 +75,10 @@ component("shopping-cart", () => {
                   type="number"
                   min="0"
                   value=${item.quantity}
-                  @input=${(e) => updateQuantity(item.id, Number(e.target.value))}
+                  oninput=${(e) => updateQuantity(item.id, Number(e.target.value))}
                 />
                 <span>$${(item.price * item.quantity).toFixed(2)}</span>
-                <button @click=${() => removeItem(item.id)}>Remove</button>
+                <button onclick=${() => removeItem(item.id)}>Remove</button>
               </div>
             `)}
           </div>
@@ -143,7 +143,7 @@ component("user-search", () => {
         type="text"
         placeholder="Search users..."
         value=${searchTerm()}
-        @input=${(e) => searchTerm(e.target.value)}
+        oninput=${(e) => searchTerm(e.target.value)}
       />
 
       ${loading()
@@ -232,7 +232,7 @@ component("contact-form", () => {
         <input
           type="text"
           value=${name()}
-          @input=${(e) => name(e.target.value)}
+          oninput=${(e) => name(e.target.value)}
           class=${nameError() ? "error" : ""}
         />
         ${nameError() ? html`<span class="error-msg">${nameError()}</span>` : null}
@@ -243,7 +243,7 @@ component("contact-form", () => {
         <input
           type="email"
           value=${email()}
-          @input=${(e) => email(e.target.value)}
+          oninput=${(e) => email(e.target.value)}
           class=${emailError() ? "error" : ""}
         />
         ${emailError() ? html`<span class="error-msg">${emailError()}</span>` : null}
@@ -253,7 +253,7 @@ component("contact-form", () => {
         <label>Message:</label>
         <textarea
           value=${message()}
-          @input=${(e) => message(e.target.value)}
+          oninput=${(e) => message(e.target.value)}
           class=${messageError() ? "error" : ""}
         ></textarea>
         ${messageError() ? html`<span class="error-msg">${messageError()}</span>` : null}
@@ -293,7 +293,7 @@ component("dark-mode-toggle", () => {
   const toggle = () => isDark(!isDark());
 
   return html`
-    <button @click=${toggle} class="theme-toggle">
+    <button onclick=${toggle} class="theme-toggle">
       ${isDark() ? "☀️ Light Mode" : "🌙 Dark Mode"}
     </button>
   `;
@@ -318,7 +318,7 @@ component("tab-group", ({ tabs: tabsData }) => {
           <button
             key=${index}
             class=${activeTab() === index ? "active" : ""}
-            @click=${() => activeTab(index)}
+            onclick=${() => activeTab(index)}
           >
             ${tab.title}
           </button>
@@ -458,10 +458,10 @@ component("timer-app", () => {
       <h1>${formatTime(seconds())}</h1>
       <div class="controls">
         ${!isRunning()
-          ? html`<button @click=${start}>Start</button>`
-          : html`<button @click=${pause}>Pause</button>`
+          ? html`<button onclick=${start}>Start</button>`
+          : html`<button onclick=${pause}>Pause</button>`
         }
-        <button @click=${reset}>Reset</button>
+        <button onclick=${reset}>Reset</button>
       </div>
     </div>
   `;

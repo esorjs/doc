@@ -45,7 +45,7 @@ component("hello-world", () => {
   return html`
     <div>
       <h1>Hello ${name()}!</h1>
-      <input value=${name()} @input=${(e) => name(e.target.value)} />
+      <input value=${name()} oninput=${(e) => name(e.target.value)} />
     </div>
   `;
 });
@@ -85,9 +85,9 @@ component("my-counter", () => {
 
   return html`
     <div class="counter">
-      <button @click=${decrement}>-</button>
+      <button onclick=${decrement}>-</button>
       <span>${count()}</span>
-      <button @click=${increment}>+</button>
+      <button onclick=${increment}>+</button>
     </div>
   `;
 });

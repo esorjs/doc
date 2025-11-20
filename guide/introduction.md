@@ -31,7 +31,7 @@ component("user-profile", () => {
   return html`
     <div class="profile">
       <h2>${name()}</h2>
-      <button @click=${() => name("Juan")}>Change Name</button>
+      <button onclick=${() => name("Juan")}>Change Name</button>
     </div>
   `;
 });
@@ -70,7 +70,7 @@ component("counter-app", () => {
   return html`
     <div>
       <h1>Count: ${count()}</h1>
-      <button @click=${() => count(count() + 1)}>Increment</button>
+      <button onclick=${() => count(count() + 1)}>Increment</button>
     </div>
   `;
 });

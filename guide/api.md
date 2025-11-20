@@ -45,7 +45,7 @@ const template = html`
 
 **Features:**
 - Reactive interpolation: `${signal()}`
-- Event handlers: `@click`, `@input`, etc.
+- Event handlers: `onclick`, `oninput`, etc.
 - Dynamic attributes: `class=${value}`, `disabled=${condition}`
 - Conditional rendering: `${condition ? html`...` : ""}`
 - List rendering: `${array.map(item => html`...`)}`
@@ -247,16 +247,16 @@ Use the `@` prefix for event listeners:
 
 ```javascript
 html`
-  <button @click=${handleClick}>Click</button>
-  <input @input=${handleInput} />
+  <button onclick=${handleClick}>Click</button>
+  <input oninput=${handleInput} />
   <form @submit=${handleSubmit}>...</form>
 `
 ```
 
 **Common events:**
-- `@click` - Mouse clicks
-- `@input` - Input value changes
-- `@change` - Input change (on blur)
+- `onclick` - Mouse clicks
+- `oninput` - Input value changes
+- `onchange` - Input change (on blur)
 - `@submit` - Form submission
 - `@keydown`, `@keyup` - Keyboard events
 - `@focus`, `@blur` - Focus events
@@ -362,7 +362,7 @@ component("user-card", (props: UserProps) => {
   return html`
     <div>
       <h3>${props.name}</h3>
-      <button @click=${() => isExpanded(!isExpanded())}>
+      <button onclick=${() => isExpanded(!isExpanded())}>
         Toggle
       </button>
     </div>

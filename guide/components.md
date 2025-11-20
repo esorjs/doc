@@ -153,7 +153,7 @@ component("colored-box", () => {
 
   return html`
     <div style="background: ${color()}; padding: 20px;">
-      <input type="color" value=${color()} @input=${(e) => color(e.target.value)} />
+      <input type="color" value=${color()} oninput=${(e) => color(e.target.value)} />
     </div>
   `;
 });
@@ -172,7 +172,7 @@ component("toggle-button", () => {
   return html`
     <button
       class="btn ${isActive() ? 'active' : ''}"
-      @click=${() => isActive(!isActive())}
+      onclick=${() => isActive(!isActive())}
     >
       ${isActive() ? 'Active' : 'Inactive'}
     </button>
@@ -281,7 +281,7 @@ component("parent-comp", () => {
   return html`
     <div>
       <child-comp message=${message()}></child-comp>
-      <button @click=${() => message("Updated!")}>Update</button>
+      <button onclick=${() => message("Updated!")}>Update</button>
     </div>
   `;
 });
@@ -307,7 +307,7 @@ component("child-button", () => {
   };
 
   return html`
-    <button @click=${handleClick}>Click Me</button>
+    <button onclick=${handleClick}>Click Me</button>
   `;
 });
 
@@ -358,7 +358,7 @@ component("login-button", () => {
   };
 
   return html`
-    <button @click=${handleLogin}>Login</button>
+    <button onclick=${handleLogin}>Login</button>
   `;
 });
 ```
@@ -535,17 +535,17 @@ component("todo-list", () => {
     <div>
       <input
         value=${input()}
-        @input=${(e) => input(e.target.value)}
+        oninput=${(e) => input(e.target.value)}
         @keydown=${(e) => e.key === "Enter" && addTodo()}
       />
-      <button @click=${addTodo}>Add</button>
+      <button onclick=${addTodo}>Add</button>
 
       <ul>
         ${todos().map(todo => html`
           <li
             key=${todo.id}
             style="text-decoration: ${todo.done ? 'line-through' : 'none'}"
-            @click=${() => toggleTodo(todo.id)}
+            onclick=${() => toggleTodo(todo.id)}
           >
             ${todo.text}
           </li>
@@ -605,7 +605,7 @@ component("batch-demo", () => {
   return html`
     <div>
       <p>${firstName()} ${lastName()}</p>
-      <button @click=${updateName}>Update</button>
+      <button onclick=${updateName}>Update</button>
     </div>
   `;
 });
