@@ -20,7 +20,7 @@ component("counter-app", () => {
   const decrement = () => count(count() - 1);
   const reset = () => count(0);
 
-  return html\`
+  return html`
     <style>
       :host {
         display: block;
@@ -67,14 +67,14 @@ component("counter-app", () => {
     </style>
 
     <div>
-      <h1>\${count()}</h1>
+      <h1>${count()}</h1>
       <div class="buttons">
-        <button @click=\${decrement}>-</button>
-        <button @click=\${reset} class="reset">Reset</button>
-        <button @click=\${increment}>+</button>
+        <button @click=${decrement}>-</button>
+        <button @click=${reset} class="reset">Reset</button>
+        <button @click=${increment}>+</button>
       </div>
     </div>
-  \`;
+  `;
 });
   </script>
 </body>
