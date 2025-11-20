@@ -128,10 +128,11 @@ Esor is ideal for:
 
 ## Next Steps
 
-- [Quick Start Guide](./getting-started)
-- [Basic Tutorial](./tutorial)
-- [API Documentation](./api)
-- [Examples](./examples)
+- [Try the Playground](./playground) - Experiment with Esor in your browser
+- [Quick Start Guide](./getting-started) - Set up your first project
+- [Basic Tutorial](./tutorial) - Learn the fundamentals
+- [API Documentation](./api) - Complete reference
+- [Examples](./examples) - Real-world use cases
 
 ::: tip TIP
 Esor is designed to be adopted gradually. You can start with a single component in your existing application and grow from there.

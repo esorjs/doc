@@ -12,10 +12,13 @@ hero:
 
   actions:
     - theme: brand
-      text: Start
+      text: Get Started
       link: guide/introduction
     - theme: alt
-      text: View on GitHub
+      text: Try Playground
+      link: guide/playground
+    - theme: alt
+      text: GitHub
       link: "https://github.com/esorjs/esor"
 
 features:

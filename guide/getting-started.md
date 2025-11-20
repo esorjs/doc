@@ -117,6 +117,7 @@ import "./components/counter.js";
 
 Now that you have Esor installed and running, you can:
 
+- [Try the Interactive Playground](./playground) - Experiment without setup
 - [Learn the basics with the Tutorial](./tutorial)
 - [Explore the API Documentation](./api)
 - [See practical examples](./examples)
