@@ -4,7 +4,28 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Esor Playground</title>
-  <script type="module" src="https://unpkg.com/playground-elements@0.18.1/playground-ide.js"></script>
+
+  <!-- Import map for playground-elements dependencies -->
+  <script type="importmap">
+  {
+    "imports": {
+      "tslib": "https://cdn.jsdelivr.net/npm/tslib@2.6.2/tslib.es6.mjs",
+      "lit": "https://cdn.jsdelivr.net/npm/lit@2.8.0/index.js",
+      "lit/": "https://cdn.jsdelivr.net/npm/lit@2.8.0/",
+      "@lit/reactive-element": "https://cdn.jsdelivr.net/npm/@lit/reactive-element@1.6.3/reactive-element.js",
+      "@lit/reactive-element/": "https://cdn.jsdelivr.net/npm/@lit/reactive-element@1.6.3/",
+      "lit-element": "https://cdn.jsdelivr.net/npm/lit-element@3.3.3/index.js",
+      "lit-element/": "https://cdn.jsdelivr.net/npm/lit-element@3.3.3/",
+      "lit-html": "https://cdn.jsdelivr.net/npm/lit-html@2.8.0/lit-html.js",
+      "lit-html/": "https://cdn.jsdelivr.net/npm/lit-html@2.8.0/",
+      "@material/mwc-button": "https://cdn.jsdelivr.net/npm/@material/mwc-button@0.27.0/mwc-button.js",
+      "@material/mwc-button/": "https://cdn.jsdelivr.net/npm/@material/mwc-button@0.27.0/",
+      "esor": "https://cdn.jsdelivr.net/npm/esor@latest/dist/esor.js"
+    }
+  }
+  </script>
+
+  <script type="module" src="https://cdn.jsdelivr.net/npm/playground-elements@0.18.1/playground-ide.js"></script>
   <style>
     body {
       margin: 0;
@@ -191,14 +212,6 @@ component("counter-app", () => {
   }
 }
       </script>
-
-      <script type="sample/json" filename="import-map.json" hidden>
-{
-  "imports": {
-    "esor": "https://cdn.jsdelivr.net/npm/esor@latest/dist/esor.js"
-  }
-}
-      </script>
     </playground-ide>
 
     <!-- Todo List Example -->
@@ -341,14 +354,6 @@ component("todo-app", () => {
   }
 }
       </script>
-
-      <script type="sample/json" filename="import-map.json" hidden>
-{
-  "imports": {
-    "esor": "https://cdn.jsdelivr.net/npm/esor@latest/dist/esor.js"
-  }
-}
-      </script>
     </playground-ide>
 
     <!-- User Card Example -->
@@ -417,14 +422,6 @@ component("user-card", ({ name, role, avatar }) => {
 {
   "dependencies": {
     "esor": "latest"
-  }
-}
-      </script>
-
-      <script type="sample/json" filename="import-map.json" hidden>
-{
-  "imports": {
-    "esor": "https://cdn.jsdelivr.net/npm/esor@latest/dist/esor.js"
   }
 }
       </script>
@@ -546,14 +543,6 @@ component("random-user", () => {
 {
   "dependencies": {
     "esor": "latest"
-  }
-}
-      </script>
-
-      <script type="sample/json" filename="import-map.json" hidden>
-{
-  "imports": {
-    "esor": "https://cdn.jsdelivr.net/npm/esor@latest/dist/esor.js"
   }
 }
       </script>
