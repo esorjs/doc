@@ -447,6 +447,9 @@ component("random-user", () => {
 };
 
 onMounted(() => {
+  // Ensure we're in the browser
+  if (typeof window === 'undefined') return;
+
   // Load playground-elements
   const script = document.createElement('script');
   script.type = 'module';
@@ -454,22 +457,40 @@ onMounted(() => {
   document.head.appendChild(script);
 
   script.onload = () => {
-    setTimeout(() => {
-      createPlaygrounds();
-      initTheme();
-    }, 200);
+    // Wait for custom element to be defined
+    customElements.whenDefined('playground-ide').then(() => {
+      // Additional delay to ensure DOM is fully ready
+      setTimeout(() => {
+        console.log('Creating playgrounds...');
+        createPlaygrounds();
+        initTheme();
+      }, 500);
+    });
+  };
+
+  script.onerror = () => {
+    console.error('Failed to load playground-elements');
   };
 });
 
 function createPlaygrounds() {
+  console.log('createPlaygrounds called, examples:', Object.keys(examples));
+
   Object.entries(examples).forEach(([id, example]) => {
     const container = document.getElementById(`playground-${id}`);
-    if (!container) return;
+    console.log(`Looking for container: playground-${id}`, container ? 'found' : 'NOT FOUND');
+
+    if (!container) {
+      console.error(`Container not found: playground-${id}`);
+      return;
+    }
 
     const ide = document.createElement('playground-ide');
     ide.setAttribute('editable-file-system', '');
     ide.setAttribute('line-numbers', '');
     ide.setAttribute('resizable', '');
+
+    console.log(`Creating playground for ${id} with ${Object.keys(example.files).length} files`);
 
     Object.entries(example.files).forEach(([filename, content]) => {
       const script = document.createElement('script');
@@ -481,7 +502,10 @@ function createPlaygrounds() {
     });
 
     container.appendChild(ide);
+    console.log(`Playground ${id} created and appended`);
   });
+
+  console.log('All playgrounds created');
 }
 
 function initTheme() {
