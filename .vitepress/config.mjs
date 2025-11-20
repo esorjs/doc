@@ -27,14 +27,29 @@ export default defineConfig({
 
     sidebar: [
       {
-        text: "Examples",
+        text: "Getting Started",
         items: [
-          { text: "Components", link: "/guide/components" },
-          { text: "Hooks", link: "/guide/hooks" },
-
-          { text: "Markdown Examples", link: "/markdown-examples" },
-          { text: "Runtime API Examples", link: "/api-examples" },
+          { text: "Introduction", link: "/guide/introduction" },
+          { text: "Quick Start", link: "/guide/getting-started" },
         ],
+      },
+      {
+        text: "Core Concepts",
+        items: [
+          { text: "Tutorial", link: "/guide/tutorial" },
+          { text: "Components", link: "/guide/components" },
+        ],
+      },
+      {
+        text: "API Reference",
+        items: [
+          { text: "API", link: "/guide/api" },
+          { text: "Reactivity", link: "/guide/hooks" },
+        ],
+      },
+      {
+        text: "Examples",
+        items: [{ text: "Practical Examples", link: "/guide/examples" }],
       },
     ],
 
@@ -43,13 +58,13 @@ export default defineConfig({
     },
 
     socialLinks: [
-      { icon: "github", link: "https://github.com/vuejs/vitepress" },
+      { icon: "github", link: "https://github.com/esorjs/esor" },
       { icon: "x", link: "https://x.com/esor_js" },
     ],
 
     footer: {
       message:
-        'Released under the <a href="https://github.com/vuejs/vitepress/blob/main/LICENSE">MIT License</a>.',
+        'Released under the <a href="https://github.com/esorjs/esor/blob/main/LICENSE">MIT License</a>.',
       copyright:
         'Copyright © 2024-present <a href="https://github.com/juancristobalgd1">Juan Cristobal</a>',
     },
