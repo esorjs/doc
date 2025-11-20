@@ -92,12 +92,12 @@ component("random-user", () => {
 
     <div class="container">
       <h2>🎲 Random User Generator</h2>
-      \${loading() ? html`<div class="loading">Loading...</div>` : user() ? html`
+      ${loading() ? html`<div class="loading">Loading...</div>` : user() ? html`
         <div>
-          <img class="avatar" src="\${user().picture.large}" alt="User" />
-          <div class="name">\${user().name.first} \${user().name.last}</div>
-          <div class="email">\${user().email}</div>
-          <button @click=\${fetchUser}>Get Another User</button>
+          <img class="avatar" src="${user().picture.large}" alt="User" />
+          <div class="name">${user().name.first} ${user().name.last}</div>
+          <div class="email">${user().email}</div>
+          <button @click=${fetchUser}>Get Another User</button>
         </div>
       ` : null}
     </div>
