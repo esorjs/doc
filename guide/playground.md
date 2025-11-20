@@ -5,21 +5,249 @@ layout: doc
 <script type="module" src="https://unpkg.com/playground-elements@0.18.1/playground-ide.js"></script>
 
 <style>
+  .playground-controls {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin: 20px 0 12px;
+    align-items: center;
+  }
+
+  .theme-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: var(--vp-c-bg-soft);
+    border: 1px solid var(--vp-c-divider);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+  }
+
+  .theme-toggle:hover {
+    background: var(--vp-c-bg-mute);
+  }
+
+  .share-button {
+    padding: 8px 16px;
+    background: var(--vp-c-brand-1);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .share-button:hover {
+    background: var(--vp-c-brand-2);
+    transform: translateY(-1px);
+  }
+
+  .share-button:active {
+    transform: translateY(0);
+  }
+
+  .notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    background: var(--vp-c-brand-1);
+    color: white;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.3s;
+    z-index: 1000;
+  }
+
+  .notification.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
   playground-ide {
     height: 500px;
-    margin: 20px 0;
+    margin: 0 0 20px;
     border: 1px solid var(--vp-c-divider);
     border-radius: 8px;
+    transition: border-color 0.3s;
+  }
+
+  /* Dark mode theme for playground */
+  playground-ide.dark-theme {
+    --playground-code-background: #1e1e1e;
+    --playground-code-default-color: #d4d4d4;
+    --playground-code-comment-color: #6a9955;
+    --playground-code-keyword-color: #569cd6;
+    --playground-code-number-color: #b5cea8;
+    --playground-code-string-color: #ce9178;
+    --playground-code-atom-color: #4ec9b0;
+    --playground-code-property-color: #9cdcfe;
+    --playground-code-variable-color: #9cdcfe;
+    --playground-code-callee-color: #dcdcaa;
+    --playground-code-operator-color: #d4d4d4;
+    --playground-border-color: #3e3e3e;
+    --playground-preview-toolbar-background: #252526;
+    --playground-preview-toolbar-foreground: #cccccc;
+    --playground-bar-background: #252526;
+    --playground-highlight-color: #094771;
+  }
+
+  /* Light mode theme for playground */
+  playground-ide.light-theme {
+    --playground-code-background: #ffffff;
+    --playground-code-default-color: #000000;
+    --playground-code-comment-color: #008000;
+    --playground-code-keyword-color: #0000ff;
+    --playground-code-number-color: #098658;
+    --playground-code-string-color: #a31515;
+    --playground-code-atom-color: #0451a5;
+    --playground-code-property-color: #001080;
+    --playground-code-variable-color: #001080;
+    --playground-code-callee-color: #795e26;
+    --playground-code-operator-color: #000000;
+    --playground-border-color: #e5e5e5;
+    --playground-preview-toolbar-background: #f3f3f3;
+    --playground-preview-toolbar-foreground: #383838;
+    --playground-bar-background: #f3f3f3;
+    --playground-highlight-color: #add6ff;
+  }
+
+  .example-section {
+    margin: 40px 0;
+  }
+
+  .example-section h2 {
+    margin-bottom: 8px;
+  }
+
+  .example-section p {
+    margin-bottom: 16px;
+    color: var(--vp-c-text-2);
   }
 </style>
+
+<script>
+  // Theme management
+  function initPlayground() {
+    const savedTheme = localStorage.getItem('playground-theme') ||
+                      (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+
+    applyTheme(savedTheme);
+
+    // Listen for theme changes
+    document.querySelectorAll('.theme-toggle').forEach(toggle => {
+      toggle.addEventListener('click', () => {
+        const currentTheme = localStorage.getItem('playground-theme') || 'light';
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        applyTheme(newTheme);
+        localStorage.setItem('playground-theme', newTheme);
+      });
+    });
+
+    // Share functionality
+    document.querySelectorAll('.share-button').forEach(button => {
+      button.addEventListener('click', async (e) => {
+        const ide = e.target.closest('.example-section').querySelector('playground-ide');
+        await sharePlayground(ide, e.target);
+      });
+    });
+  }
+
+  function applyTheme(theme) {
+    document.querySelectorAll('playground-ide').forEach(ide => {
+      ide.classList.remove('light-theme', 'dark-theme');
+      ide.classList.add(`${theme}-theme`);
+    });
+
+    document.querySelectorAll('.theme-toggle').forEach(toggle => {
+      const icon = toggle.querySelector('.theme-icon');
+      if (icon) {
+        icon.textContent = theme === 'light' ? '🌙' : '☀️';
+        toggle.querySelector('.theme-label').textContent =
+          theme === 'light' ? 'Dark Mode' : 'Light Mode';
+      }
+    });
+  }
+
+  async function sharePlayground(ide, button) {
+    try {
+      // Get all script elements from the playground
+      const scripts = ide.querySelectorAll('script[type^="sample/"]');
+      const files = {};
+
+      scripts.forEach(script => {
+        const filename = script.getAttribute('filename');
+        const content = script.textContent.trim();
+        files[filename] = content;
+      });
+
+      // Create shareable text
+      const shareText = JSON.stringify(files, null, 2);
+
+      // Try to copy to clipboard
+      await navigator.clipboard.writeText(shareText);
+
+      // Show notification
+      showNotification('Code copied to clipboard! 📋');
+    } catch (err) {
+      console.error('Failed to copy:', err);
+      showNotification('Failed to copy code ❌', 'error');
+    }
+  }
+
+  function showNotification(message, type = 'success') {
+    const notification = document.createElement('div');
+    notification.className = 'notification';
+    notification.textContent = message;
+    document.body.appendChild(notification);
+
+    setTimeout(() => notification.classList.add('show'), 10);
+
+    setTimeout(() => {
+      notification.classList.remove('show');
+      setTimeout(() => notification.remove(), 300);
+    }, 3000);
+  }
+
+  // Initialize when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPlayground);
+  } else {
+    setTimeout(initPlayground, 100);
+  }
+</script>
 
 # Interactive Playground
 
 Try Esor directly in your browser! Edit the code and see the results instantly.
 
+<div class="playground-controls">
+  <div class="theme-toggle">
+    <span class="theme-icon">🌙</span>
+    <span class="theme-label">Dark Mode</span>
+  </div>
+</div>
+
 ## Counter Example
 
+<div class="example-section">
+
 A simple reactive counter demonstrating signals and event handling.
+
+<button class="share-button">
+  <span>📋</span>
+  <span>Share Code</span>
+</button>
 
 <playground-ide editable-file-system line-numbers resizable>
   <script type="sample/html" filename="index.html">
@@ -110,9 +338,18 @@ A simple reactive counter demonstrating signals and event handling.
   </script>
 </playground-ide>
 
+</div>
+
 ## Todo List
 
+<div class="example-section">
+
 A complete todo list with add, toggle, and remove functionality.
+
+<button class="share-button">
+  <span>📋</span>
+  <span>Share Code</span>
+</button>
 
 <playground-ide editable-file-system line-numbers resizable>
   <script type="sample/html" filename="index.html">
@@ -289,9 +526,18 @@ A complete todo list with add, toggle, and remove functionality.
   </script>
 </playground-ide>
 
+</div>
+
 ## User Card with Computed Values
 
+<div class="example-section">
+
 Demonstrates computed signals for derived state.
+
+<button class="share-button">
+  <span>📋</span>
+  <span>Share Code</span>
+</button>
 
 <playground-ide editable-file-system line-numbers resizable>
   <script type="sample/html" filename="index.html">
@@ -421,9 +667,18 @@ Demonstrates computed signals for derived state.
   </script>
 </playground-ide>
 
+</div>
+
 ## Fetch Data Example
 
+<div class="example-section">
+
 Real API integration with loading and error states.
+
+<button class="share-button">
+  <span>📋</span>
+  <span>Share Code</span>
+</button>
 
 <playground-ide editable-file-system line-numbers resizable>
   <script type="sample/html" filename="index.html">
@@ -555,7 +810,20 @@ Real API integration with loading and error states.
   </script>
 </playground-ide>
 
+</div>
+
 ## Tips for Using the Playground
+
+### Theme Switching
+Toggle between light and dark mode using the theme button at the top. Your preference is saved automatically.
+- **Light Mode**: Optimized for daylight viewing
+- **Dark Mode**: Easier on the eyes in low-light environments
+
+### Sharing Code
+Click the "Share Code" button on any example to copy its code to your clipboard. You can then paste it anywhere:
+- Share with teammates
+- Save to your notes
+- Import into your own projects
 
 ### Editing Code
 - Click on any code section to start editing
