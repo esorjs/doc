@@ -11,7 +11,7 @@
     }
   }
   </script>
-  <script type="module" src="https://unpkg.com/playground-elements@0.18.1"></script>
+  <script type="module" src="https://unpkg.com/playground-elements@0.18.1/playground-ide.js"></script>
   <style>
     * {
       margin: 0;
@@ -90,14 +90,14 @@
       overflow: hidden;
     }
 
-    playground-project {
+    playground-ide {
       width: 100%;
       height: 100%;
       display: block;
     }
 
     /* Dark theme for playground */
-    playground-project {
+    playground-ide {
       --playground-code-background: #1e1e1e;
       --playground-code-default-color: #d4d4d4;
       --playground-code-comment-color: #6a9955;
@@ -138,24 +138,21 @@
 
   <div class="playground-container">
     <!-- Counter Example -->
-    <playground-project id="counter-playground" sandbox-base-url="https://unpkg.com/playground-elements@0.18.1/playground-worker.js">
-      <script type="sample/html" filename="index.html">
-<!DOCTYPE html>
+    <playground-ide id="counter-playground" editable-file-system line-numbers resizable>
+      <script type="sample/html" filename="index.html"><!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Esor Counter</title>
-  </head>
-  <body>
-    <counter-app></counter-app>
-    <script type="module" src="./counter.js"></script>
-  </body>
-</html>
-      </script>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Esor Counter</title>
+</head>
+<body>
+  <counter-app></counter-app>
+  <script type="module" src="./counter.js"></script>
+</body>
+</html></script>
 
-      <script type="sample/js" filename="counter.js">
-import { component, html, signal } from "https://unpkg.com/esor@latest/dist/esor.js";
+      <script type="sample/js" filename="counter.js">import { component, html, signal } from "https://unpkg.com/esor@latest/dist/esor.js";
 
 component("counter-app", () => {
   const count = signal(0);
@@ -223,28 +220,24 @@ component("counter-app", () => {
       </div>
     </div>
   `;
-});
-      </script>
-    </playground-project>
+});</script>
+    </playground-ide>
 
     <!-- Todo Example -->
-    <playground-project id="todo-playground" class="hidden" sandbox-base-url="https://unpkg.com/playground-elements@0.18.1/playground-worker.js">
-      <script type="sample/html" filename="index.html">
-<!DOCTYPE html>
+    <playground-ide id="todo-playground" class="hidden" editable-file-system line-numbers resizable>
+      <script type="sample/html" filename="index.html"><!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <title>Esor Todo List</title>
-  </head>
-  <body>
-    <todo-app></todo-app>
-    <script type="module" src="./todo.js"></script>
-  </body>
-</html>
-      </script>
+<head>
+  <meta charset="UTF-8">
+  <title>Esor Todo List</title>
+</head>
+<body>
+  <todo-app></todo-app>
+  <script type="module" src="./todo.js"></script>
+</body>
+</html></script>
 
-      <script type="sample/js" filename="todo.js">
-import { component, html, signal } from "https://unpkg.com/esor@latest/dist/esor.js";
+      <script type="sample/js" filename="todo.js">import { component, html, signal } from "https://unpkg.com/esor@latest/dist/esor.js";
 
 component("todo-app", () => {
   const todos = signal([
@@ -387,28 +380,24 @@ component("todo-app", () => {
       </ul>
     </div>
   `;
-});
-      </script>
-    </playground-project>
+});</script>
+    </playground-ide>
 
     <!-- User Card Example -->
-    <playground-project id="user-card-playground" class="hidden" sandbox-base-url="https://unpkg.com/playground-elements@0.18.1/playground-worker.js">
-      <script type="sample/html" filename="index.html">
-<!DOCTYPE html>
+    <playground-ide id="user-card-playground" class="hidden" editable-file-system line-numbers resizable>
+      <script type="sample/html" filename="index.html"><!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <title>Esor User Card</title>
-  </head>
-  <body>
-    <user-card name="Alice" role="Developer" avatar="👩‍💻"></user-card>
-    <script type="module" src="./user-card.js"></script>
-  </body>
-</html>
-      </script>
+<head>
+  <meta charset="UTF-8">
+  <title>Esor User Card</title>
+</head>
+<body>
+  <user-card name="Alice" role="Developer" avatar="👩‍💻"></user-card>
+  <script type="module" src="./user-card.js"></script>
+</body>
+</html></script>
 
-      <script type="sample/js" filename="user-card.js">
-import { component, html } from "https://unpkg.com/esor@latest/dist/esor.js";
+      <script type="sample/js" filename="user-card.js">import { component, html } from "https://unpkg.com/esor@latest/dist/esor.js";
 
 component("user-card", ({ name, role, avatar }) => {
   return html`
@@ -451,28 +440,24 @@ component("user-card", ({ name, role, avatar }) => {
       <p>${role}</p>
     </div>
   `;
-});
-      </script>
-    </playground-project>
+});</script>
+    </playground-ide>
 
     <!-- Fetch Example -->
-    <playground-project id="fetch-playground" class="hidden" sandbox-base-url="https://unpkg.com/playground-elements@0.18.1/playground-worker.js">
-      <script type="sample/html" filename="index.html">
-<!DOCTYPE html>
+    <playground-ide id="fetch-playground" class="hidden" editable-file-system line-numbers resizable>
+      <script type="sample/html" filename="index.html"><!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <title>Esor Data Fetching</title>
-  </head>
-  <body>
-    <random-user></random-user>
-    <script type="module" src="./random-user.js"></script>
-  </body>
-</html>
-      </script>
+<head>
+  <meta charset="UTF-8">
+  <title>Esor Data Fetching</title>
+</head>
+<body>
+  <random-user></random-user>
+  <script type="module" src="./random-user.js"></script>
+</body>
+</html></script>
 
-      <script type="sample/js" filename="random-user.js">
-import { component, html, signal, effect } from "https://unpkg.com/esor@latest/dist/esor.js";
+      <script type="sample/js" filename="random-user.js">import { component, html, signal, effect } from "https://unpkg.com/esor@latest/dist/esor.js";
 
 component("random-user", () => {
   const user = signal(null);
@@ -583,15 +568,14 @@ component("random-user", () => {
       ` : null}
     </div>
   `;
-});
-      </script>
-    </playground-project>
+});</script>
+    </playground-ide>
   </div>
 
   <script>
     // Tab switching
     const tabs = document.querySelectorAll('.tab');
-    const playgrounds = document.querySelectorAll('playground-project');
+    const playgrounds = document.querySelectorAll('playground-ide');
 
     tabs.forEach(tab => {
       tab.addEventListener('click', () => {
