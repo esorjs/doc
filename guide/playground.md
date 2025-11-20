@@ -3,7 +3,9 @@ layout: doc
 ---
 
 <script setup>
-import { onMounted } from 'vue';
+import { onMounted, nextTick, ref } from 'vue';
+
+const isLoaded = ref(false);
 
 const examples = {
   counter: {
@@ -446,31 +448,43 @@ component("random-user", () => {
   }
 };
 
-onMounted(() => {
+onMounted(async () => {
   // Ensure we're in the browser
   if (typeof window === 'undefined') return;
+
+  console.log('onMounted called');
+
+  // Wait for Vue to finish DOM updates
+  await nextTick();
+  console.log('After nextTick');
 
   // Load playground-elements
   const script = document.createElement('script');
   script.type = 'module';
   script.src = 'https://unpkg.com/playground-elements@0.18.1/playground-ide.js';
-  document.head.appendChild(script);
 
   script.onload = () => {
+    console.log('playground-elements script loaded');
     // Wait for custom element to be defined
-    customElements.whenDefined('playground-ide').then(() => {
+    customElements.whenDefined('playground-ide').then(async () => {
+      console.log('playground-ide custom element defined');
+      // Wait for Vue to update
+      await nextTick();
       // Additional delay to ensure DOM is fully ready
       setTimeout(() => {
         console.log('Creating playgrounds...');
         createPlaygrounds();
         initTheme();
-      }, 500);
+        isLoaded.value = true;
+      }, 100);
     });
   };
 
   script.onerror = () => {
     console.error('Failed to load playground-elements');
   };
+
+  document.head.appendChild(script);
 });
 
 function createPlaygrounds() {
@@ -485,24 +499,29 @@ function createPlaygrounds() {
       return;
     }
 
+    console.log(`Creating playground for ${id} with ${Object.keys(example.files).length} files`);
+
+    // Create playground-ide element
     const ide = document.createElement('playground-ide');
     ide.setAttribute('editable-file-system', '');
     ide.setAttribute('line-numbers', '');
     ide.setAttribute('resizable', '');
 
-    console.log(`Creating playground for ${id} with ${Object.keys(example.files).length} files`);
-
+    // Add sample files as script children
     Object.entries(example.files).forEach(([filename, content]) => {
-      const script = document.createElement('script');
+      const scriptEl = document.createElement('script');
       const ext = filename.split('.').pop();
-      script.setAttribute('type', `sample/${ext === 'js' ? 'js' : ext}`);
-      script.setAttribute('filename', filename);
-      script.textContent = content;
-      ide.appendChild(script);
+      scriptEl.setAttribute('type', `sample/${ext === 'js' ? 'js' : ext}`);
+      scriptEl.setAttribute('filename', filename);
+      scriptEl.textContent = content;
+      ide.appendChild(scriptEl);
     });
 
+    // Clear container and append the playground-ide
+    container.innerHTML = '';
     container.appendChild(ide);
-    console.log(`Playground ${id} created and appended`);
+
+    console.log(`Playground ${id} appended to container`);
   });
 
   console.log('All playgrounds created');
@@ -585,6 +604,13 @@ function applyTheme(theme) {
     min-height: 400px;
   }
 
+  .loading {
+    padding: 40px;
+    text-align: center;
+    color: var(--vp-c-text-2);
+    font-size: 16px;
+  }
+
   /* Dark mode theme for playground */
   playground-ide.dark-theme {
     --playground-code-background: #1e1e1e;
@@ -639,31 +665,47 @@ Try Esor directly in your browser! Edit the code and see the results instantly.
 
 ## Counter Example
 
+<ClientOnly>
 <div class="example-section">
   <p>A simple reactive counter demonstrating signals and event handling.</p>
-  <div id="playground-counter" class="playground-container"></div>
+  <div id="playground-counter" class="playground-container">
+    <div v-if="!isLoaded" class="loading">Loading playground...</div>
+  </div>
 </div>
+</ClientOnly>
 
 ## Todo List
 
+<ClientOnly>
 <div class="example-section">
   <p>A complete todo list with add, toggle, and remove functionality.</p>
-  <div id="playground-todo" class="playground-container"></div>
+  <div id="playground-todo" class="playground-container">
+    <div v-if="!isLoaded" class="loading">Loading playground...</div>
+  </div>
 </div>
+</ClientOnly>
 
 ## User Card Component
 
+<ClientOnly>
 <div class="example-section">
   <p>A reusable user card component with props and custom styling.</p>
-  <div id="playground-userCard" class="playground-container"></div>
+  <div id="playground-userCard" class="playground-container">
+    <div v-if="!isLoaded" class="loading">Loading playground...</div>
+  </div>
 </div>
+</ClientOnly>
 
 ## Fetch Data Example
 
+<ClientOnly>
 <div class="example-section">
   <p>Fetching data from an API and displaying it reactively with loading states.</p>
-  <div id="playground-randomUser" class="playground-container"></div>
+  <div id="playground-randomUser" class="playground-container">
+    <div v-if="!isLoaded" class="loading">Loading playground...</div>
+  </div>
 </div>
+</ClientOnly>
 
 ## Next Steps
 
