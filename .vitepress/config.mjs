@@ -5,6 +5,7 @@ export default defineConfig({
   title: "Esor",
   description: "Documentation for the Esor JavaScript framework",
   lang: "en-US",
+  base: "/doc/",
   head: [["link", { rel: "icon", type: "image/png", href: "/logo.png" }]],
   locales: {
     root: {
