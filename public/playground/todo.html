@@ -106,18 +106,18 @@ component("todo-app", () => {
         <input
           type="text"
           placeholder="Add a new task..."
-          :value=\${input()}
-          @input=\${(e) => input(e.target.value)}
-          @keypress=\${(e) => e.key === 'Enter' && addTodo()}
+          :value=${input()}
+          @input=${(e) => input(e.target.value)}
+          @keypress=${(e) => e.key === 'Enter' && addTodo()}
         />
-        <button @click=\${addTodo}>Add</button>
+        <button @click=${addTodo}>Add</button>
       </div>
       <ul class="todo-list">
-        \${todos().map(todo => html`
-          <li class="\${todo.done ? 'todo-item done' : 'todo-item'}" key=\${todo.id}>
-            <input type="checkbox" :checked=\${todo.done} @change=\${() => toggleTodo(todo.id)} />
-            <span>\${todo.text}</span>
-            <button class="remove-btn" @click=\${() => removeTodo(todo.id)}>✕</button>
+        ${todos().map(todo => html`
+          <li class="${todo.done ? 'todo-item done' : 'todo-item'}" key=${todo.id}>
+            <input type="checkbox" :checked=${todo.done} @change=${() => toggleTodo(todo.id)} />
+            <span>${todo.text}</span>
+            <button class="remove-btn" @click=${() => removeTodo(todo.id)}>✕</button>
           </li>
         `)}
       </ul>
