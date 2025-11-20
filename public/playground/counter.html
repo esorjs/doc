@@ -3,14 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Counter Example - Esor</title>
   <style>
-    body { margin: 0; padding: 0; }
+    body { margin: 0; padding: 0; font-family: system-ui, sans-serif; }
   </style>
 </head>
 <body>
   <counter-app></counter-app>
-  <script type="module">
-import { component, html, signal } from "https://unpkg.com/esor@latest/dist/esor.js";
+  <script type="module" crossorigin>
+import { component, html, signal } from "https://cdn.jsdelivr.net/npm/esor@latest/dist/esor.js";
 
 component("counter-app", () => {
   const count = signal(0);
@@ -66,11 +67,11 @@ component("counter-app", () => {
     </style>
 
     <div>
-      <h1>\${count()}</h1>
+      <h1>${count()}</h1>
       <div class="buttons">
-        <button @click=\${decrement}>-</button>
-        <button @click=\${reset} class="reset">Reset</button>
-        <button @click=\${increment}>+</button>
+        <button @click=${decrement}>-</button>
+        <button @click=${reset} class="reset">Reset</button>
+        <button @click=${increment}>+</button>
       </div>
     </div>
   `;

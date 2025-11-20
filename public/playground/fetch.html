@@ -2,14 +2,15 @@
 <html>
 <head>
   <meta charset="UTF-8">
+  <title>Data Fetching - Esor</title>
   <style>
-    body { margin: 0; padding: 0; }
+    body { margin: 0; padding: 0; font-family: system-ui, sans-serif; }
   </style>
 </head>
 <body>
   <random-user></random-user>
-  <script type="module">
-import { component, html, signal, effect } from "https://unpkg.com/esor@latest/dist/esor.js";
+  <script type="module" crossorigin>
+import { component, html, signal, effect } from "https://cdn.jsdelivr.net/npm/esor@latest/dist/esor.js";
 
 component("random-user", () => {
   const user = signal(null);
