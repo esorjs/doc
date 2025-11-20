@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Esor Playground</title>
-  <script src="https://unpkg.com/@stackblitz/sdk@1/bundles/sdk.umd.js"></script>
   <style>
     * {
       margin: 0;
@@ -13,20 +12,15 @@
     }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: #1e1e1e;
       color: #fff;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
+      min-height: 100vh;
     }
 
     header {
       background: #2d2d30;
-      padding: 12px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      padding: 20px;
       border-bottom: 1px solid #3e3e42;
     }
 
@@ -37,7 +31,7 @@
     }
 
     .logo h1 {
-      font-size: 20px;
+      font-size: 24px;
       font-weight: 600;
     }
 
@@ -47,35 +41,79 @@
       font-size: 14px;
     }
 
-    .tabs {
-      display: flex;
-      gap: 8px;
-      padding: 0 20px;
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .intro {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .intro h2 {
+      font-size: 32px;
+      margin-bottom: 16px;
+    }
+
+    .intro p {
+      font-size: 18px;
+      color: #cccccc;
+    }
+
+    .examples-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+    }
+
+    .example-card {
       background: #252526;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid #3e3e42;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .example-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    .example-header {
+      padding: 20px;
+      background: #2d2d30;
       border-bottom: 1px solid #3e3e42;
     }
 
-    .tab {
-      padding: 10px 16px;
-      background: none;
-      border: none;
+    .example-header h3 {
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+
+    .example-header p {
       color: #969696;
-      cursor: pointer;
-      border-bottom: 2px solid transparent;
       font-size: 14px;
     }
 
-    .tab:hover {
-      color: #fff;
+    .example-content {
+      padding: 20px;
     }
 
-    .tab.active {
-      color: #fff;
-      border-bottom-color: #4ec9b0;
+    .example-link {
+      display: inline-block;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      text-decoration: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      font-weight: 600;
+      transition: opacity 0.2s;
     }
 
-    #playground-container {
-      flex: 1;
+    .example-link:hover {
+      opacity: 0.9;
     }
   </style>
 </head>
@@ -87,89 +125,53 @@
     </div>
   </header>
 
-  <div class="tabs">
-    <button class="tab active" data-example="counter">Counter</button>
-    <button class="tab" data-example="todo">Todo List</button>
-    <button class="tab" data-example="user-card">User Card</button>
-    <button class="tab" data-example="fetch">Data Fetching</button>
+  <div class="container">
+    <div class="intro">
+      <h2>Try Esor Examples</h2>
+      <p>Click on any example below to see it in action</p>
+    </div>
+
+    <div class="examples-grid">
+      <div class="example-card">
+        <div class="example-header">
+          <h3>🔢 Counter</h3>
+          <p>A simple reactive counter demonstrating signals and event handling</p>
+        </div>
+        <div class="example-content">
+          <a href="counter.html" class="example-link" target="_blank">Open Example →</a>
+        </div>
+      </div>
+
+      <div class="example-card">
+        <div class="example-header">
+          <h3>📝 Todo List</h3>
+          <p>A complete todo list with add, toggle, and remove functionality</p>
+        </div>
+        <div class="example-content">
+          <a href="todo.html" class="example-link" target="_blank">Open Example →</a>
+        </div>
+      </div>
+
+      <div class="example-card">
+        <div class="example-header">
+          <h3>👤 User Card</h3>
+          <p>A reusable user card component with props and custom styling</p>
+        </div>
+        <div class="example-content">
+          <a href="user-card.html" class="example-link" target="_blank">Open Example →</a>
+        </div>
+      </div>
+
+      <div class="example-card">
+        <div class="example-header">
+          <h3>🎲 Data Fetching</h3>
+          <p>Fetching data from an API and displaying it reactively</p>
+        </div>
+        <div class="example-content">
+          <a href="fetch.html" class="example-link" target="_blank">Open Example →</a>
+        </div>
+      </div>
+    </div>
   </div>
-
-  <div id="playground-container"></div>
-
-  <script>
-    const examples = {
-      counter: {
-        files: {
-          'index.html': \`<!DOCTYPE html>
-<html><head><meta charset="UTF-8"><title>Counter</title></head>
-<body>
-<counter-app></counter-app>
-<script type="module" src="./app.js"></script>
-</body></html>\`,
-          'app.js': \`import{component,html,signal}from"https://unpkg.com/esor@latest/dist/esor.js";component("counter-app",()=>{const c=signal(0);return html\\\`<style>:host{display:block;font-family:system-ui;padding:20px;text-align:center}h1{color:#e74c3c;font-size:3rem;margin:0}.buttons{display:flex;gap:10px;justify-content:center;margin-top:20px}button{background:#3498db;border:none;border-radius:4px;color:white;cursor:pointer;font-size:1.2rem;padding:10px 20px}button:hover{background:#2980b9}.reset{background:#95a5a6}</style><div><h1>\\\${c()}</h1><div class="buttons"><button @click=\\\${()=>c(c()-1)}>-</button><button @click=\\\${()=>c(0)} class="reset">Reset</button><button @click=\\\${()=>c(c()+1)}>+</button></div></div>\\\`})\`
-        }
-      },
-      todo: {
-        files: {
-          'index.html': \`<!DOCTYPE html>
-<html><head><meta charset="UTF-8"><title>Todo</title></head>
-<body>
-<todo-app></todo-app>
-<script type="module" src="./app.js"></script>
-</body></html>\`,
-          'app.js': \`import{component,html,signal}from"https://unpkg.com/esor@latest/dist/esor.js";component("todo-app",()=>{const t=signal([{id:1,text:"Learn Esor",done:!1},{id:2,text:"Build something",done:!1}]),i=signal("");const add=()=>{if(i().trim()){t([...t(),{id:Date.now(),text:i(),done:!1}]);i("")}};return html\\\`<style>:host{display:block;max-width:500px;margin:20px auto;padding:20px;font-family:system-ui}h1{text-align:center;color:#2c3e50}input,button{padding:10px;font-size:16px}button{background:#3498db;color:white;border:none;border-radius:4px;cursor:pointer}</style><div><h1>📝 Tasks</h1><div style="display:flex;gap:8px;margin:20px 0"><input type="text" placeholder="Add task..." :value=\\\${i()} @input=\\\${e=>i(e.target.value)} @keypress=\\\${e=>e.key==='Enter'&&add()} style="flex:1"><button @click=\\\${add}>Add</button></div><ul style="list-style:none;padding:0">\\\${t().map(todo=>html\\\`<li key=\\\${todo.id} style="padding:12px;background:#f8f9fa;margin-bottom:8px;border-radius:4px"><span>\\\${todo.text}</span></li>\\\`)}</ul></div>\\\`})\`
-        }
-      },
-      'user-card': {
-        files: {
-          'index.html': \`<!DOCTYPE html>
-<html><head><meta charset="UTF-8"><title>User Card</title></head>
-<body>
-<user-card name="Alice" role="Developer" avatar="👩‍💻"></user-card>
-<script type="module" src="./app.js"></script>
-</body></html>\`,
-          'app.js': \`import{component,html}from"https://unpkg.com/esor@latest/dist/esor.js";component("user-card",({name,role,avatar})=>html\\\`<style>:host{display:block;max-width:300px;margin:20px}.card{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:12px;padding:30px;color:white;text-align:center}.avatar{font-size:4rem;margin-bottom:15px}h2{margin:0 0 5px 0;font-size:1.5rem}p{margin:0;opacity:0.9}</style><div class="card"><div class="avatar">\\\${avatar}</div><h2>\\\${name}</h2><p>\\\${role}</p></div>\\\`)\`
-        }
-      },
-      fetch: {
-        files: {
-          'index.html': \`<!DOCTYPE html>
-<html><head><meta charset="UTF-8"><title>Fetch</title></head>
-<body>
-<random-user></random-user>
-<script type="module" src="./app.js"></script>
-</body></html>\`,
-          'app.js': \`import{component,html,signal,effect}from"https://unpkg.com/esor@latest/dist/esor.js";component("random-user",()=>{const u=signal(null),l=signal(!1);const f=async()=>{l(!0);try{const r=await fetch('https://randomuser.me/api/'),d=await r.json();u(d.results[0])}catch(e){console.error(e)}finally{l(!1)}};effect(()=>f());return html\\\`<style>:host{display:block;max-width:400px;margin:20px auto;font-family:system-ui;text-align:center}h2{color:#2c3e50}img{width:120px;border-radius:50%}button{background:#3498db;color:white;border:none;padding:12px 24px;border-radius:6px;cursor:pointer;margin-top:15px}</style><div><h2>🎲 Random User</h2>\\\${l()?html\\\`<p>Loading...</p>\\\`:u()?html\\\`<div><img src="\\\${u().picture.large}"><p><strong>\\\${u().name.first} \\\${u().name.last}</strong></p><p>\\\${u().email}</p><button @click=\\\${f}>Get Another</button></div>\\\`:null}</div>\\\`})\`
-        }
-      }
-    };
-
-    function loadExample(id) {
-      StackBlitzSDK.embedProject(
-        'playground-container',
-        {
-          title: 'Esor Example',
-          template: 'html',
-          files: examples[id].files
-        },
-        {
-          height: '100%',
-          openFile: 'index.html',
-          view: 'preview',
-          theme: 'dark'
-        }
-      );
-    }
-
-    document.querySelectorAll('.tab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        loadExample(tab.dataset.example);
-      });
-    });
-
-    loadExample('counter');
-  </script>
 </body>
 </html>
