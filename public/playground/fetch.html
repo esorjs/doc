@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body { margin: 0; padding: 0; }
+  </style>
+</head>
+<body>
+  <random-user></random-user>
+  <script type="module">
+import { component, html, signal, effect } from "https://unpkg.com/esor@latest/dist/esor.js";
+
+component("random-user", () => {
+  const user = signal(null);
+  const loading = signal(false);
+
+  const fetchUser = async () => {
+    loading(true);
+    try {
+      const res = await fetch('https://randomuser.me/api/');
+      const data = await res.json();
+      user(data.results[0]);
+    } catch (error) {
+      console.error('Error:', error);
+    } finally {
+      loading(false);
+    }
+  };
+
+  effect(() => {
+    fetchUser();
+  });
+
+  return html`
+    <style>
+      :host {
+        display: block;
+        max-width: 400px;
+        margin: 20px auto;
+        font-family: system-ui, sans-serif;
+      }
+
+      .container {
+        background: white;
+        border-radius: 12px;
+        padding: 30px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        text-align: center;
+      }
+
+      h2 {
+        color: #2c3e50;
+        margin-bottom: 20px;
+      }
+
+      .avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        margin: 0 auto 15px;
+      }
+
+      .name {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #34495e;
+        margin: 10px 0 5px;
+      }
+
+      .email {
+        color: #7f8c8d;
+        margin: 5px 0;
+      }
+
+      button {
+        background: #3498db;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 6px;
+        cursor: pointer;
+        margin-top: 15px;
+      }
+
+      .loading {
+        color: #7f8c8d;
+        padding: 40px;
+      }
+    </style>
+
+    <div class="container">
+      <h2>🎲 Random User Generator</h2>
+      \${loading() ? html`<div class="loading">Loading...</div>` : user() ? html`
+        <div>
+          <img class="avatar" src="\${user().picture.large}" alt="User" />
+          <div class="name">\${user().name.first} \${user().name.last}</div>
+          <div class="email">\${user().email}</div>
+          <button @click=\${fetchUser}>Get Another User</button>
+        </div>
+      ` : null}
+    </div>
+  `;
+});
+  </script>
+</body>
+</html>
