@@ -23,6 +23,7 @@ export default defineConfig({
     nav: [
       { text: "Home", link: "/" },
       { text: "Guide", link: "/guide/introduction" },
+      { text: "Playground", link: "/guide/playground" },
     ],
 
     sidebar: [
@@ -31,6 +32,7 @@ export default defineConfig({
         items: [
           { text: "Introduction", link: "/guide/introduction" },
           { text: "Quick Start", link: "/guide/getting-started" },
+          { text: "Playground", link: "/guide/playground" },
         ],
       },
       {
@@ -48,8 +50,11 @@ export default defineConfig({
         ],
       },
       {
-        text: "Examples",
-        items: [{ text: "Practical Examples", link: "/guide/examples" }],
+        text: "Resources",
+        items: [
+          { text: "Templates & Starter Kits", link: "/guide/templates" },
+          { text: "Practical Examples", link: "/guide/examples" },
+        ],
       },
     ],
 
