@@ -3,9 +3,12 @@
     "docs:dev": "vitepress dev",
     "docs:build": "vitepress build",
     "docs:preview": "vitepress preview",
-     "deploy": "bash scripts/deploy.sh"
+    "deploy": "bash scripts/deploy.sh"
   },
   "devDependencies": {
     "vitepress": "^1.6.3"
+  },
+  "dependencies": {
+    "alien-signals": "^3.1.0"
   }
 }
