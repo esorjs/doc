@@ -2,7 +2,7 @@
 
 Official documentation for the [Esor JavaScript framework](https://github.com/esorjs/esor).
 
-🌐 **Live Documentation:** https://esorjs.github.io/doc/
+🌐 **Live Documentation:** https://esorjs.github.io/
 
 ## About
 
@@ -81,7 +81,7 @@ MIT License
 ## Links
 
 - **Esor Framework:** https://github.com/esorjs/esor
-- **Documentation:** https://esorjs.github.io/doc/
+- **Documentation:** https://esorjs.github.io/
 - **Issues:** https://github.com/esorjs/doc/issues
 - **Twitter:** https://x.com/esor_js
 
