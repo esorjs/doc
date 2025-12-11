@@ -11,7 +11,7 @@ echo "Construyendo el sitio con VitePress..."
 npm run docs:build
 
 # Navegar al directorio de salida de la build
-cd docs/.vitepress/dist
+cd .vitepress/dist
 
 # Inicializar un nuevo repositorio Git (si no existe)
 git init

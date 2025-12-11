@@ -5,17 +5,12 @@ export default defineConfig({
   title: "Esor",
   description: "Documentation for the Esor JavaScript framework",
   lang: "en-US",
-  base: "/doc/",
+  base: "/",
   head: [["link", { rel: "icon", type: "image/png", href: "/logo.png" }]],
   locales: {
     root: {
       label: "English",
       lang: "en",
-    },
-    es: {
-      label: "Spanish",
-      lang: "es",
-      link: "/es/guide",
     },
   },
   themeConfig: {
