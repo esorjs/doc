@@ -1,0 +1,3 @@
+## 2024-05-23 - Accessible Tabs and Embedded Code
+**Learning:** Even in a "playground" environment, standard UI patterns like tabs must follow ARIA guidelines (roles, states, keyboard navigation). Additionally, when providing code examples, we should demonstrate accessible practices (like adding ARIA labels to icon-only buttons) as users often copy-paste these examples directly.
+**Action:** Always check `public/` folder for standalone HTML files that might escape standard linting/component checks. Ensure embedded code examples serve as "best practice" references, not just functional demos.
