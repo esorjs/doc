@@ -112,7 +112,7 @@
 <body>
   <header>
     <h1>⚡ Esor Playground</h1>
-    <a href="/doc/">← Back to Docs</a>
+    <a href="/doc/"><span aria-hidden="true">←</span> Back to Docs</a>
   </header>
 
   <div class="container">
@@ -206,9 +206,9 @@ component("counter-app", () => {
     <div>
       <h1>${count()}</h1>
       <div class="buttons">
-        <button @click=${decrement}>-</button>
+        <button aria-label="Decrement count" @click=${decrement}>-</button>
         <button @click=${reset} class="reset">Reset</button>
-        <button @click=${increment}>+</button>
+        <button aria-label="Increment count" @click=${increment}>+</button>
       </div>
     </div>
   `;
@@ -337,6 +337,7 @@ component("todo-app", () => {
         <input
           type="text"
           placeholder="Add a new task..."
+          aria-label="New task description"
           :value=${input()}
           @input=${(e) => input(e.target.value)}
           @keypress=${(e) => e.key === 'Enter' && addTodo()}
@@ -348,7 +349,7 @@ component("todo-app", () => {
           <li class="${todo.done ? 'todo-item done' : 'todo-item'}" key=${todo.id}>
             <input type="checkbox" :checked=${todo.done} @change=${() => toggleTodo(todo.id)} />
             <span>${todo.text}</span>
-            <button class="remove-btn" @click=${() => removeTodo(todo.id)}>✕</button>
+            <button class="remove-btn" aria-label="Remove task" @click=${() => removeTodo(todo.id)}>✕</button>
           </li>
         `)}
       </ul>
@@ -536,7 +537,7 @@ component("random-user", () => {
 
     <div class="container">
       <h2>🎲 Random User Generator</h2>
-      ${loading() ? html`<div class="loading">Loading...</div>` : user() ? html`
+      ${loading() ? html`<div class="loading" role="status">Loading...</div>` : user() ? html`
         <div>
           <img class="avatar" src="${user().picture.large}" alt="User" />
           <div class="name">${user().name.first} ${user().name.last}</div>
