@@ -565,6 +565,13 @@ component("random-user", () => {
       // Activate corresponding tab
       event.target.classList.add('active');
     }
+
+    // Hide header if embedded in iframe
+    if (window.self !== window.top) {
+      document.querySelector('header').style.display = 'none';
+      document.querySelector('.container').style.paddingTop = '10px';
+      document.body.style.background = 'transparent';
+    }
   </script>
 </body>
 </html>
