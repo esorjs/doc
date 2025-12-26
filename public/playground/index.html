@@ -96,6 +96,12 @@
       border-color: #667eea;
     }
 
+    .tab:focus-visible {
+      outline: 2px solid #667eea;
+      outline-offset: -2px;
+      z-index: 1;
+    }
+
     playground-ide {
       height: 600px;
       border-radius: 8px;
@@ -116,15 +122,15 @@
   </header>
 
   <div class="container">
-    <div class="tabs">
-      <button class="tab active" onclick="switchExample('counter')">Counter</button>
-      <button class="tab" onclick="switchExample('todo')">Todo List</button>
-      <button class="tab" onclick="switchExample('user-card')">User Card</button>
-      <button class="tab" onclick="switchExample('fetch')">Data Fetching</button>
+    <div class="tabs" role="tablist" aria-label="Playground Examples">
+      <button id="tab-counter" class="tab active" role="tab" aria-selected="true" aria-controls="counter">Counter</button>
+      <button id="tab-todo" class="tab" role="tab" aria-selected="false" aria-controls="todo" tabindex="-1">Todo List</button>
+      <button id="tab-user-card" class="tab" role="tab" aria-selected="false" aria-controls="user-card" tabindex="-1">User Card</button>
+      <button id="tab-fetch" class="tab" role="tab" aria-selected="false" aria-controls="fetch" tabindex="-1">Data Fetching</button>
     </div>
 
     <!-- Counter Example -->
-    <playground-ide id="counter" class="active" line-numbers resizable>
+    <playground-ide id="counter" class="active" role="tabpanel" aria-labelledby="tab-counter" line-numbers resizable>
       <script type="sample/html" filename="index.html">
 <!DOCTYPE html>
 <html>
@@ -217,7 +223,7 @@ component("counter-app", () => {
     </playground-ide>
 
     <!-- Todo List Example -->
-    <playground-ide id="todo" line-numbers resizable>
+    <playground-ide id="todo" role="tabpanel" aria-labelledby="tab-todo" line-numbers resizable>
       <script type="sample/html" filename="index.html">
 <!DOCTYPE html>
 <html>
@@ -359,7 +365,7 @@ component("todo-app", () => {
     </playground-ide>
 
     <!-- User Card Example -->
-    <playground-ide id="user-card" line-numbers resizable>
+    <playground-ide id="user-card" role="tabpanel" aria-labelledby="tab-user-card" line-numbers resizable>
       <script type="sample/html" filename="index.html">
 <!DOCTYPE html>
 <html>
@@ -430,7 +436,7 @@ component("user-card", ({ name, role, avatar }) => {
     </playground-ide>
 
     <!-- Data Fetching Example -->
-    <playground-ide id="fetch" line-numbers resizable>
+    <playground-ide id="fetch" role="tabpanel" aria-labelledby="tab-fetch" line-numbers resizable>
       <script type="sample/html" filename="index.html">
 <!DOCTYPE html>
 <html>
@@ -552,25 +558,59 @@ component("random-user", () => {
   </div>
 
   <script>
+    const tabs = document.querySelectorAll('.tab');
+    const panels = document.querySelectorAll('playground-ide');
+
     function switchExample(exampleId) {
-      // Hide all playground-ide elements
-      document.querySelectorAll('playground-ide').forEach(p => p.classList.remove('active'));
+      tabs.forEach(tab => {
+        const isSelected = tab.getAttribute('aria-controls') === exampleId;
+        tab.classList.toggle('active', isSelected);
+        tab.setAttribute('aria-selected', isSelected);
+        tab.setAttribute('tabindex', isSelected ? '0' : '-1');
+        if (isSelected) tab.focus();
+      });
 
-      // Remove active class from all tabs
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-
-      // Show selected playground-ide
-      document.getElementById(exampleId).classList.add('active');
-
-      // Activate corresponding tab
-      event.target.classList.add('active');
+      panels.forEach(panel => {
+        const isActive = panel.id === exampleId;
+        panel.classList.toggle('active', isActive);
+      });
     }
+
+    // Attach click listeners
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        switchExample(tab.getAttribute('aria-controls'));
+      });
+    });
+
+    // Keyboard navigation
+    const tabList = document.querySelector('.tabs');
+    tabList.addEventListener('keydown', (e) => {
+      const activeTab = document.activeElement;
+      if (!activeTab || activeTab.role !== 'tab') return;
+
+      const tabArray = Array.from(tabs);
+      const index = tabArray.indexOf(activeTab);
+      let newIndex = -1;
+
+      if (e.key === 'ArrowRight') {
+        newIndex = (index + 1) % tabArray.length;
+      } else if (e.key === 'ArrowLeft') {
+        newIndex = (index - 1 + tabArray.length) % tabArray.length;
+      }
+
+      if (newIndex !== -1) {
+        e.preventDefault();
+        const newTab = tabArray[newIndex];
+        switchExample(newTab.getAttribute('aria-controls'));
+      }
+    });
 
     // Hide header if embedded in iframe
     if (window.self !== window.top) {
       document.querySelector('header').style.display = 'none';
       document.querySelector('.container').style.paddingTop = '10px';
-      document.body.style.background = 'transparent';
+      // Removed transparent background to ensure contrast
     }
   </script>
 </body>
