@@ -90,6 +90,11 @@
       color: #fff;
     }
 
+    .tab:focus {
+      outline: 2px solid #667eea;
+      outline-offset: -2px;
+    }
+
     .tab.active {
       background: #667eea;
       color: white;
@@ -116,15 +121,39 @@
   </header>
 
   <div class="container">
-    <div class="tabs">
-      <button class="tab active" onclick="switchExample('counter')">Counter</button>
-      <button class="tab" onclick="switchExample('todo')">Todo List</button>
-      <button class="tab" onclick="switchExample('user-card')">User Card</button>
-      <button class="tab" onclick="switchExample('fetch')">Data Fetching</button>
+    <div class="tabs" role="tablist" aria-label="Playground Examples">
+      <button
+        id="tab-counter"
+        class="tab active"
+        role="tab"
+        aria-selected="true"
+        aria-controls="counter"
+        onclick="switchExample('counter')">Counter</button>
+      <button
+        id="tab-todo"
+        class="tab"
+        role="tab"
+        aria-selected="false"
+        aria-controls="todo"
+        onclick="switchExample('todo')">Todo List</button>
+      <button
+        id="tab-user-card"
+        class="tab"
+        role="tab"
+        aria-selected="false"
+        aria-controls="user-card"
+        onclick="switchExample('user-card')">User Card</button>
+      <button
+        id="tab-fetch"
+        class="tab"
+        role="tab"
+        aria-selected="false"
+        aria-controls="fetch"
+        onclick="switchExample('fetch')">Data Fetching</button>
     </div>
 
     <!-- Counter Example -->
-    <playground-ide id="counter" class="active" line-numbers resizable>
+    <playground-ide id="counter" class="active" line-numbers resizable role="tabpanel" aria-labelledby="tab-counter">
       <script type="sample/html" filename="index.html">
 <!DOCTYPE html>
 <html>
@@ -217,7 +246,7 @@ component("counter-app", () => {
     </playground-ide>
 
     <!-- Todo List Example -->
-    <playground-ide id="todo" line-numbers resizable>
+    <playground-ide id="todo" line-numbers resizable role="tabpanel" aria-labelledby="tab-todo">
       <script type="sample/html" filename="index.html">
 <!DOCTYPE html>
 <html>
@@ -359,7 +388,7 @@ component("todo-app", () => {
     </playground-ide>
 
     <!-- User Card Example -->
-    <playground-ide id="user-card" line-numbers resizable>
+    <playground-ide id="user-card" line-numbers resizable role="tabpanel" aria-labelledby="tab-user-card">
       <script type="sample/html" filename="index.html">
 <!DOCTYPE html>
 <html>
@@ -430,7 +459,7 @@ component("user-card", ({ name, role, avatar }) => {
     </playground-ide>
 
     <!-- Data Fetching Example -->
-    <playground-ide id="fetch" line-numbers resizable>
+    <playground-ide id="fetch" line-numbers resizable role="tabpanel" aria-labelledby="tab-fetch">
       <script type="sample/html" filename="index.html">
 <!DOCTYPE html>
 <html>
@@ -557,20 +586,64 @@ component("random-user", () => {
       document.querySelectorAll('playground-ide').forEach(p => p.classList.remove('active'));
 
       // Remove active class from all tabs
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab').forEach(t => {
+        t.classList.remove('active');
+        t.setAttribute('aria-selected', 'false');
+      });
 
       // Show selected playground-ide
       document.getElementById(exampleId).classList.add('active');
 
       // Activate corresponding tab
-      event.target.classList.add('active');
+      // Find the button that called this, or find by id
+      const activeTab = document.querySelector(`.tab[onclick*="'${exampleId}'"]`);
+      if (activeTab) {
+        activeTab.classList.add('active');
+        activeTab.setAttribute('aria-selected', 'true');
+      }
     }
+
+    // Keyboard navigation for tabs
+    const tabs = document.querySelectorAll('.tab');
+    const tabList = document.querySelector('.tabs');
+
+    tabList.addEventListener('keydown', (e) => {
+      const activeElement = document.activeElement;
+      const index = Array.from(tabs).indexOf(activeElement);
+
+      if (index === -1) return;
+
+      let nextIndex = null;
+
+      switch (e.key) {
+        case 'ArrowLeft':
+          nextIndex = index - 1;
+          if (nextIndex < 0) nextIndex = tabs.length - 1;
+          break;
+        case 'ArrowRight':
+          nextIndex = index + 1;
+          if (nextIndex >= tabs.length) nextIndex = 0;
+          break;
+        case 'Home':
+          nextIndex = 0;
+          break;
+        case 'End':
+          nextIndex = tabs.length - 1;
+          break;
+      }
+
+      if (nextIndex !== null) {
+        tabs[nextIndex].focus();
+        tabs[nextIndex].click();
+      }
+    });
 
     // Hide header if embedded in iframe
     if (window.self !== window.top) {
       document.querySelector('header').style.display = 'none';
       document.querySelector('.container').style.paddingTop = '10px';
-      document.body.style.background = 'transparent';
+      // Fixed: Do not set transparent background to ensure contrast
+      // document.body.style.background = 'transparent';
     }
   </script>
 </body>
