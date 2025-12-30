@@ -459,17 +459,28 @@ import { component, html, signal, effect } from 'esor';
 component("random-user", () => {
   const user = signal(null);
   const loading = signal(false);
+  let currentController = null;
 
   const fetchUser = async () => {
+    if (currentController) {
+      currentController.abort();
+    }
+    currentController = new AbortController();
+    const { signal } = currentController;
+
     loading(true);
     try {
-      const res = await fetch('https://randomuser.me/api/');
+      const res = await fetch('https://randomuser.me/api/', { signal });
       const data = await res.json();
       user(data.results[0]);
     } catch (error) {
-      console.error('Error:', error);
+      if (error.name !== 'AbortError') {
+        console.error('Error:', error);
+      }
     } finally {
-      loading(false);
+      if (!signal.aborted) {
+        loading(false);
+      }
     }
   };
 
