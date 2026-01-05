@@ -116,15 +116,15 @@
   </header>
 
   <div class="container">
-    <div class="tabs">
-      <button class="tab active" onclick="switchExample('counter')">Counter</button>
-      <button class="tab" onclick="switchExample('todo')">Todo List</button>
-      <button class="tab" onclick="switchExample('user-card')">User Card</button>
-      <button class="tab" onclick="switchExample('fetch')">Data Fetching</button>
+    <div class="tabs" role="tablist">
+      <button id="tab-counter" class="tab active" onclick="switchExample('counter')" role="tab" aria-selected="true" aria-controls="counter">Counter</button>
+      <button id="tab-todo" class="tab" onclick="switchExample('todo')" role="tab" aria-selected="false" aria-controls="todo">Todo List</button>
+      <button id="tab-user-card" class="tab" onclick="switchExample('user-card')" role="tab" aria-selected="false" aria-controls="user-card">User Card</button>
+      <button id="tab-fetch" class="tab" onclick="switchExample('fetch')" role="tab" aria-selected="false" aria-controls="fetch">Data Fetching</button>
     </div>
 
     <!-- Counter Example -->
-    <playground-ide id="counter" class="active" line-numbers resizable>
+    <playground-ide id="counter" class="active" line-numbers resizable role="tabpanel" aria-labelledby="tab-counter">
       <script type="sample/html" filename="index.html">
 <!DOCTYPE html>
 <html>
@@ -217,7 +217,7 @@ component("counter-app", () => {
     </playground-ide>
 
     <!-- Todo List Example -->
-    <playground-ide id="todo" line-numbers resizable>
+    <playground-ide id="todo" line-numbers resizable role="tabpanel" aria-labelledby="tab-todo">
       <script type="sample/html" filename="index.html">
 <!DOCTYPE html>
 <html>
@@ -359,7 +359,7 @@ component("todo-app", () => {
     </playground-ide>
 
     <!-- User Card Example -->
-    <playground-ide id="user-card" line-numbers resizable>
+    <playground-ide id="user-card" line-numbers resizable role="tabpanel" aria-labelledby="tab-user-card">
       <script type="sample/html" filename="index.html">
 <!DOCTYPE html>
 <html>
@@ -430,7 +430,7 @@ component("user-card", ({ name, role, avatar }) => {
     </playground-ide>
 
     <!-- Data Fetching Example -->
-    <playground-ide id="fetch" line-numbers resizable>
+    <playground-ide id="fetch" line-numbers resizable role="tabpanel" aria-labelledby="tab-fetch">
       <script type="sample/html" filename="index.html">
 <!DOCTYPE html>
 <html>
@@ -553,18 +553,31 @@ component("random-user", () => {
 
   <script>
     function switchExample(exampleId) {
-      // Hide all playground-ide elements
       document.querySelectorAll('playground-ide').forEach(p => p.classList.remove('active'));
-
-      // Remove active class from all tabs
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-
-      // Show selected playground-ide
+      document.querySelectorAll('.tab').forEach(t => {
+        t.classList.remove('active');
+        t.setAttribute('aria-selected', 'false');
+      });
       document.getElementById(exampleId).classList.add('active');
-
-      // Activate corresponding tab
-      event.target.classList.add('active');
+      const tab = document.getElementById('tab-' + exampleId);
+      tab.classList.add('active');
+      tab.setAttribute('aria-selected', 'true');
     }
+
+    document.querySelector('.tabs').addEventListener('keydown', e => {
+      const tabs = Array.from(document.querySelectorAll('.tab'));
+      const idx = tabs.indexOf(document.activeElement);
+      if (idx === -1) return;
+
+      let nextIdx;
+      if (e.key === 'ArrowRight') nextIdx = (idx + 1) % tabs.length;
+      else if (e.key === 'ArrowLeft') nextIdx = (idx - 1 + tabs.length) % tabs.length;
+
+      if (nextIdx !== undefined) {
+        tabs[nextIdx].focus();
+        tabs[nextIdx].click();
+      }
+    });
 
     // Hide header if embedded in iframe
     if (window.self !== window.top) {
