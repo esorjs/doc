@@ -374,9 +374,9 @@ component("todo-app", () => {
       <ul class="todo-list">
         ${todos().map(todo => html`
           <li class="${todo.done ? 'todo-item done' : 'todo-item'}" key=${todo.id}>
-            <input type="checkbox" :checked=${todo.done} @change=${() => toggleTodo(todo.id)} />
+            <input type="checkbox" :checked=${todo.done} @change=${() => toggleTodo(todo.id)} aria-label="Toggle task completion" />
             <span>${todo.text}</span>
-            <button class="remove-btn" @click=${() => removeTodo(todo.id)}>✕</button>
+            <button class="remove-btn" @click=${() => removeTodo(todo.id)} aria-label="Remove task">✕</button>
           </li>
         `)}
       </ul>
