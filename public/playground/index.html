@@ -121,33 +121,41 @@
         id="tab-counter"
         class="tab active"
         onclick="switchExample('counter')"
+        onkeydown="handleTabKeydown(event)"
         role="tab"
         aria-selected="true"
         aria-controls="counter"
+        tabindex="0"
       >Counter</button>
       <button
         id="tab-todo"
         class="tab"
         onclick="switchExample('todo')"
+        onkeydown="handleTabKeydown(event)"
         role="tab"
         aria-selected="false"
         aria-controls="todo"
+        tabindex="-1"
       >Todo List</button>
       <button
         id="tab-user-card"
         class="tab"
         onclick="switchExample('user-card')"
+        onkeydown="handleTabKeydown(event)"
         role="tab"
         aria-selected="false"
         aria-controls="user-card"
+        tabindex="-1"
       >User Card</button>
       <button
         id="tab-fetch"
         class="tab"
         onclick="switchExample('fetch')"
+        onkeydown="handleTabKeydown(event)"
         role="tab"
         aria-selected="false"
         aria-controls="fetch"
+        tabindex="-1"
       >Data Fetching</button>
     </div>
 
@@ -588,6 +596,7 @@ component("random-user", () => {
       document.querySelectorAll('.tab').forEach(t => {
         t.classList.remove('active');
         t.setAttribute('aria-selected', 'false');
+        t.setAttribute('tabindex', '-1');
       });
 
       // Show selected playground-ide
@@ -599,7 +608,41 @@ component("random-user", () => {
       if (tab) {
         tab.classList.add('active');
         tab.setAttribute('aria-selected', 'true');
+        tab.setAttribute('tabindex', '0');
       }
+    }
+
+    function handleTabKeydown(e) {
+      const tabs = Array.from(document.querySelectorAll('.tab'));
+      const index = tabs.indexOf(e.target);
+      let nextIndex = null;
+
+      switch (e.key) {
+        case 'ArrowRight':
+        case 'ArrowDown':
+          nextIndex = (index + 1) % tabs.length;
+          break;
+        case 'ArrowLeft':
+        case 'ArrowUp':
+          nextIndex = (index - 1 + tabs.length) % tabs.length;
+          break;
+        case 'Home':
+          nextIndex = 0;
+          break;
+        case 'End':
+          nextIndex = tabs.length - 1;
+          break;
+        default:
+          return;
+      }
+
+      e.preventDefault();
+      const nextTab = tabs[nextIndex];
+
+      // Update tabindex for all
+      tabs.forEach(t => t.setAttribute('tabindex', '-1'));
+      nextTab.setAttribute('tabindex', '0');
+      nextTab.focus();
     }
 
     // Hide header if embedded in iframe
