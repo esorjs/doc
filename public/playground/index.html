@@ -124,6 +124,7 @@
         role="tab"
         aria-selected="true"
         aria-controls="counter"
+        tabindex="0"
       >Counter</button>
       <button
         id="tab-todo"
@@ -132,6 +133,7 @@
         role="tab"
         aria-selected="false"
         aria-controls="todo"
+        tabindex="-1"
       >Todo List</button>
       <button
         id="tab-user-card"
@@ -140,6 +142,7 @@
         role="tab"
         aria-selected="false"
         aria-controls="user-card"
+        tabindex="-1"
       >User Card</button>
       <button
         id="tab-fetch"
@@ -148,6 +151,7 @@
         role="tab"
         aria-selected="false"
         aria-controls="fetch"
+        tabindex="-1"
       >Data Fetching</button>
     </div>
 
@@ -580,14 +584,43 @@ component("random-user", () => {
   </div>
 
   <script>
+    const tabs = document.querySelectorAll('.tab');
+
+    // Handle keyboard navigation for roving tabindex
+    document.querySelector('.tabs').addEventListener('keydown', (e) => {
+      const target = e.target;
+      if (!target.classList.contains('tab')) return;
+
+      const tabsArray = Array.from(tabs);
+      const index = tabsArray.indexOf(target);
+      let newIndex = -1;
+
+      if (e.key === 'ArrowRight') {
+        newIndex = (index + 1) % tabsArray.length;
+      } else if (e.key === 'ArrowLeft') {
+        newIndex = (index - 1 + tabsArray.length) % tabsArray.length;
+      } else if (e.key === 'Home') {
+        newIndex = 0;
+      } else if (e.key === 'End') {
+        newIndex = tabsArray.length - 1;
+      }
+
+      if (newIndex !== -1) {
+        e.preventDefault();
+        tabsArray[newIndex].click();
+        tabsArray[newIndex].focus();
+      }
+    });
+
     function switchExample(exampleId) {
       // Hide all playground-ide elements
       document.querySelectorAll('playground-ide').forEach(p => p.classList.remove('active'));
 
       // Remove active class from all tabs and update aria-selected
-      document.querySelectorAll('.tab').forEach(t => {
+      tabs.forEach(t => {
         t.classList.remove('active');
         t.setAttribute('aria-selected', 'false');
+        t.setAttribute('tabindex', '-1');
       });
 
       // Show selected playground-ide
@@ -599,6 +632,7 @@ component("random-user", () => {
       if (tab) {
         tab.classList.add('active');
         tab.setAttribute('aria-selected', 'true');
+        tab.setAttribute('tabindex', '0');
       }
     }
 
