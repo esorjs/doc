@@ -124,6 +124,7 @@
         role="tab"
         aria-selected="true"
         aria-controls="counter"
+        tabindex="0"
       >Counter</button>
       <button
         id="tab-todo"
@@ -132,6 +133,7 @@
         role="tab"
         aria-selected="false"
         aria-controls="todo"
+        tabindex="-1"
       >Todo List</button>
       <button
         id="tab-user-card"
@@ -140,6 +142,7 @@
         role="tab"
         aria-selected="false"
         aria-controls="user-card"
+        tabindex="-1"
       >User Card</button>
       <button
         id="tab-fetch"
@@ -148,6 +151,7 @@
         role="tab"
         aria-selected="false"
         aria-controls="fetch"
+        tabindex="-1"
       >Data Fetching</button>
     </div>
 
@@ -588,6 +592,7 @@ component("random-user", () => {
       document.querySelectorAll('.tab').forEach(t => {
         t.classList.remove('active');
         t.setAttribute('aria-selected', 'false');
+        t.setAttribute('tabindex', '-1');
       });
 
       // Show selected playground-ide
@@ -599,6 +604,8 @@ component("random-user", () => {
       if (tab) {
         tab.classList.add('active');
         tab.setAttribute('aria-selected', 'true');
+        tab.setAttribute('tabindex', '0');
+        tab.focus();
       }
     }
 
@@ -608,6 +615,39 @@ component("random-user", () => {
       document.querySelector('.container').style.paddingTop = '10px';
       document.body.style.background = 'transparent';
     }
+
+    // Keyboard navigation for tabs
+    const tabList = document.querySelector('.tabs');
+    tabList.addEventListener('keydown', (e) => {
+      const tabs = Array.from(tabList.querySelectorAll('.tab'));
+      const index = tabs.indexOf(document.activeElement);
+
+      if (index === -1) return;
+
+      let nextIndex = null;
+
+      switch (e.key) {
+        case 'ArrowLeft':
+          nextIndex = index - 1;
+          if (nextIndex < 0) nextIndex = tabs.length - 1;
+          break;
+        case 'ArrowRight':
+          nextIndex = index + 1;
+          if (nextIndex >= tabs.length) nextIndex = 0;
+          break;
+        case 'Home':
+          nextIndex = 0;
+          break;
+        case 'End':
+          nextIndex = tabs.length - 1;
+          break;
+      }
+
+      if (nextIndex !== null) {
+        e.preventDefault();
+        tabs[nextIndex].click();
+      }
+    });
   </script>
 </body>
 </html>
