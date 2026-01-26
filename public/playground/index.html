@@ -588,6 +588,7 @@ component("random-user", () => {
       document.querySelectorAll('.tab').forEach(t => {
         t.classList.remove('active');
         t.setAttribute('aria-selected', 'false');
+        t.setAttribute('tabindex', '-1');
       });
 
       // Show selected playground-ide
@@ -599,8 +600,59 @@ component("random-user", () => {
       if (tab) {
         tab.classList.add('active');
         tab.setAttribute('aria-selected', 'true');
+        tab.setAttribute('tabindex', '0');
+        tab.focus();
       }
     }
+
+    // Initialize tabs
+    document.addEventListener('DOMContentLoaded', () => {
+      const tabs = document.querySelectorAll('.tab');
+      tabs.forEach(tab => {
+        // Initialize tabindex
+        if (tab.classList.contains('active')) {
+          tab.setAttribute('tabindex', '0');
+        } else {
+          tab.setAttribute('tabindex', '-1');
+        }
+      });
+
+      // Add keyboard navigation
+      const tablist = document.querySelector('.tabs');
+      if (tablist) {
+        tablist.addEventListener('keydown', (e) => {
+          const tabs = Array.from(document.querySelectorAll('.tab'));
+          const activeTab = document.activeElement;
+          const index = tabs.indexOf(activeTab);
+
+          if (index === -1) return;
+
+          let nextIndex = null;
+
+          switch (e.key) {
+            case 'ArrowLeft':
+              nextIndex = index - 1;
+              if (nextIndex < 0) nextIndex = tabs.length - 1;
+              break;
+            case 'ArrowRight':
+              nextIndex = index + 1;
+              if (nextIndex >= tabs.length) nextIndex = 0;
+              break;
+            case 'Home':
+              nextIndex = 0;
+              break;
+            case 'End':
+              nextIndex = tabs.length - 1;
+              break;
+          }
+
+          if (nextIndex !== null) {
+            e.preventDefault();
+            tabs[nextIndex].click(); // Click triggers switchExample which handles focus and state
+          }
+        });
+      }
+    });
 
     // Hide header if embedded in iframe
     if (window.self !== window.top) {
