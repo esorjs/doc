@@ -124,6 +124,7 @@
         role="tab"
         aria-selected="true"
         aria-controls="counter"
+        tabindex="0"
       >Counter</button>
       <button
         id="tab-todo"
@@ -132,6 +133,7 @@
         role="tab"
         aria-selected="false"
         aria-controls="todo"
+        tabindex="-1"
       >Todo List</button>
       <button
         id="tab-user-card"
@@ -140,6 +142,7 @@
         role="tab"
         aria-selected="false"
         aria-controls="user-card"
+        tabindex="-1"
       >User Card</button>
       <button
         id="tab-fetch"
@@ -148,6 +151,7 @@
         role="tab"
         aria-selected="false"
         aria-controls="fetch"
+        tabindex="-1"
       >Data Fetching</button>
     </div>
 
@@ -588,6 +592,7 @@ component("random-user", () => {
       document.querySelectorAll('.tab').forEach(t => {
         t.classList.remove('active');
         t.setAttribute('aria-selected', 'false');
+        t.setAttribute('tabindex', '-1');
       });
 
       // Show selected playground-ide
@@ -599,8 +604,33 @@ component("random-user", () => {
       if (tab) {
         tab.classList.add('active');
         tab.setAttribute('aria-selected', 'true');
+        tab.setAttribute('tabindex', '0');
+        tab.focus();
       }
     }
+
+    // Add keyboard navigation for tabs
+    document.querySelector('.tabs').addEventListener('keydown', (e) => {
+      const tabs = Array.from(document.querySelectorAll('.tab'));
+      const activeTab = document.querySelector('.tab.active');
+      let index = tabs.indexOf(activeTab);
+
+      if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        index = (index + 1) % tabs.length;
+        tabs[index].click();
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        index = (index - 1 + tabs.length) % tabs.length;
+        tabs[index].click();
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        tabs[0].click();
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        tabs[tabs.length - 1].click();
+      }
+    });
 
     // Hide header if embedded in iframe
     if (window.self !== window.top) {
