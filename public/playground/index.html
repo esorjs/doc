@@ -124,6 +124,7 @@
         role="tab"
         aria-selected="true"
         aria-controls="counter"
+        tabindex="0"
       >Counter</button>
       <button
         id="tab-todo"
@@ -132,6 +133,7 @@
         role="tab"
         aria-selected="false"
         aria-controls="todo"
+        tabindex="-1"
       >Todo List</button>
       <button
         id="tab-user-card"
@@ -140,6 +142,7 @@
         role="tab"
         aria-selected="false"
         aria-controls="user-card"
+        tabindex="-1"
       >User Card</button>
       <button
         id="tab-fetch"
@@ -148,6 +151,7 @@
         role="tab"
         aria-selected="false"
         aria-controls="fetch"
+        tabindex="-1"
       >Data Fetching</button>
     </div>
 
@@ -588,6 +592,7 @@ component("random-user", () => {
       document.querySelectorAll('.tab').forEach(t => {
         t.classList.remove('active');
         t.setAttribute('aria-selected', 'false');
+        t.setAttribute('tabindex', '-1');
       });
 
       // Show selected playground-ide
@@ -599,7 +604,42 @@ component("random-user", () => {
       if (tab) {
         tab.classList.add('active');
         tab.setAttribute('aria-selected', 'true');
+        tab.setAttribute('tabindex', '0');
+        tab.focus();
       }
+    }
+
+    // Handle Keyboard Navigation for Tabs
+    const tabList = document.querySelector('.tabs');
+    if (tabList) {
+      tabList.addEventListener('keydown', (e) => {
+        const tabs = Array.from(tabList.querySelectorAll('[role="tab"]'));
+        const index = tabs.indexOf(document.activeElement);
+
+        if (index < 0) return;
+
+        let nextIndex = null;
+
+        switch (e.key) {
+          case 'ArrowRight':
+            nextIndex = (index + 1) % tabs.length;
+            break;
+          case 'ArrowLeft':
+            nextIndex = (index - 1 + tabs.length) % tabs.length;
+            break;
+          case 'Home':
+            nextIndex = 0;
+            break;
+          case 'End':
+            nextIndex = tabs.length - 1;
+            break;
+        }
+
+        if (nextIndex !== null) {
+          e.preventDefault();
+          tabs[nextIndex].click();
+        }
+      });
     }
 
     // Hide header if embedded in iframe
