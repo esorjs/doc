@@ -132,6 +132,7 @@
         role="tab"
         aria-selected="false"
         aria-controls="todo"
+        tabindex="-1"
       >Todo List</button>
       <button
         id="tab-user-card"
@@ -140,6 +141,7 @@
         role="tab"
         aria-selected="false"
         aria-controls="user-card"
+        tabindex="-1"
       >User Card</button>
       <button
         id="tab-fetch"
@@ -148,6 +150,7 @@
         role="tab"
         aria-selected="false"
         aria-controls="fetch"
+        tabindex="-1"
       >Data Fetching</button>
     </div>
 
@@ -588,6 +591,7 @@ component("random-user", () => {
       document.querySelectorAll('.tab').forEach(t => {
         t.classList.remove('active');
         t.setAttribute('aria-selected', 'false');
+        t.setAttribute('tabindex', '-1');
       });
 
       // Show selected playground-ide
@@ -599,8 +603,38 @@ component("random-user", () => {
       if (tab) {
         tab.classList.add('active');
         tab.setAttribute('aria-selected', 'true');
+        tab.setAttribute('tabindex', '0');
       }
     }
+
+    // Keyboard navigation for tabs
+    const tabList = document.querySelector('.tabs');
+    tabList.addEventListener('keydown', (e) => {
+      const tabs = Array.from(tabList.querySelectorAll('[role="tab"]'));
+      const index = tabs.indexOf(document.activeElement);
+
+      // Only handle if we're focused on a tab
+      if (index === -1) return;
+
+      let newIndex = null;
+
+      if (e.key === 'ArrowRight') {
+        newIndex = (index + 1) % tabs.length;
+      } else if (e.key === 'ArrowLeft') {
+        newIndex = (index - 1 + tabs.length) % tabs.length;
+      } else if (e.key === 'Home') {
+        newIndex = 0;
+      } else if (e.key === 'End') {
+        newIndex = tabs.length - 1;
+      }
+
+      if (newIndex !== null) {
+        e.preventDefault();
+        const tab = tabs[newIndex];
+        tab.click();
+        tab.focus();
+      }
+    });
 
     // Hide header if embedded in iframe
     if (window.self !== window.top) {
